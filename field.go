@@ -34,34 +34,33 @@ func (f Field) String() (s string) {
     return
 }
 
-type fMod byte
+type fMod int
 
 func (f fMod) String() (s string) {
-    mask := f
-    if (mask.Has(fm_public)) {
+    if (f.Has(fm_public)) {
         s += "public"
-    } else if (mask.Has(fm_private)) {
+    } else if (f.Has(fm_private)) {
         s += "private"
-    } else if (mask.Has(fm_protected)) {
+    } else if (f.Has(fm_protected)) {
         s += "protected"
     }
 
-    if (mask.Has(fm_final)) {
+    if (f.Has(fm_final)) {
         s = "final " + s
     }
 
-    if (mask.Has(fm_static)) {
+    if (f.Has(fm_static)) {
         s += " static"
     }
-    if (mask.Has(fm_transient)) {
+    if (f.Has(fm_transient)) {
         s += " transient"
     }
-    if (mask.Has(fm_volatile)) {
+    if (f.Has(fm_volatile)) {
         s += " volatile"
     }
     return
 }
 
 func (f fMod) Has(mask Mask) bool {
-    return (mask.mask & int(f)) == 0
+    return (mask.mask & int(f)) != 0
 }
