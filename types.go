@@ -3,11 +3,6 @@ package main
 /*== Start Visibility ==*/
 type Visibility byte
 
-const (
-    private Visibility = iota
-    protected
-    public
-)
 /*=== End Visibility ===*/
 
 // Static
@@ -24,6 +19,20 @@ type Type struct {
     typeArguments []*string // Optional
 }
 
+func (t Type) String() (s string) {
+    s += t.typeDeclSpecifier
+    if len(t.typeArguments) > 0 {
+        s += "<"
+        s += *t.typeArguments[0]
+        for i := 1; i < len(t.typeArguments); i++ {
+            s += ", "
+            s += *t.typeArguments[i]
+        }
+        s += ">"
+    }
+    return
+}
+
 type Mask int
 
 const (
@@ -31,21 +40,21 @@ const (
     private
     protected
 )
-
+/*
 const (
     abstract FuncMask = 1 << (iota + 3)
 )
-
+*/
 type Variable struct{
     Name string
     Type Type
 }
-
+/*
 type Field struct{
     Variable
     Visibility
     Doc
-}
+}*/
 type Argument struct{
     Variable
     Doc
@@ -58,7 +67,7 @@ type Function struct{
     Arguments []Argument
     Returns Type
     Visibility Visibility
-    Description, Precondition, Postcondition, Returns string
+    Description, Precondition, Postcondition string
     Exceptions []Exception
 }
 type Constructor Function
