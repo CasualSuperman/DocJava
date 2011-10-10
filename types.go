@@ -1,5 +1,14 @@
 package main
 
+type Visibility string
+
+const (
+    private Visibility = iota
+    protected
+    public
+)
+
+type Doc string
 type Type string
 type Variable struct{
     Name string
@@ -7,12 +16,12 @@ type Variable struct{
 }
 type Field struct{
     Variable
-    Visibility string
-    Doc string
+    Visibility
+    Doc
 }
 type Argument struct{
     Variable
-    Doc string
+    Doc
 }
 type Exception struct{
     Name, Reason string
