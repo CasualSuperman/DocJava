@@ -1,0 +1,80 @@
+// DocJava is a program for generating Java code from a JavaDoc API webpage
+// that will give the same result after JavaDoc as the webpage it was generated
+// from.
+package main
+/* 
+   Author: Bobby Wertman
+   Version: 1.0.0
+   Date: March 20, 2011
+   This application and its source are provided 'as-is' and are available under
+   the MIT License.
+*/
+import (
+	"flag"
+	"fmt"
+	"http"
+	"io/ioutil"
+	"os"
+	"regexp"
+	"strconv"
+	"sync"
+)
+
+var user *string = flag.String("user", "cs151-02", "HTTP username required for the page.")
+var pass *string = flag.String("pass", "javarocks11", "HTTP password required for the page.")
+var labnum *int = flag.Int("labID", -1, "Lab number.")
+var semester *string = flag.String("semester", "spring11", "The semester")
+var course *string = flag.String("course", "cs151", "The course")
+var assignment *int = flag.Int("assignmentID", -1, "Assignment number")
+
+func main() {
+	flag.Parse()
+	url := "http://" + *user + ":" + *pass + "@polaris.cs.wcu.edu/" +
+		"~adalton/teaching/" + *semester + "/" + *course
+	if *labnum > 0 {
+		url += "/labs/lab" + twoDigit(*labnum)
+	} else if *assignment > 0 {
+		url += "/assignments/assignment" + twoDigit(*assignment)
+	} else {
+		fmt.Println("You must specify either an assignment or a lab.")
+		os.Exit(1)
+	}
+	url += "docs/"
+	classUrl := url + "allclasses-noframe.html"
+	classHTTP, err := http.Get(classUrl)
+	if err != nil {
+		fmt.Println("The requested assignment could not be retreived.")
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	classHTML, _ := ioutil.ReadAll(classHTTP.Body)
+	reg, _ := regexp.Compile("A HREF=\"([^\"+)\" [^>]+>([^<+])</A>")
+	classTemp := reg.FindAllStringSubmatch(string(classHTML), -1)
+	classPairs := make([][2]string, len(classTemp))
+	for i, class := range classTemp {
+		for j, val := range class {
+			if j != 0 {
+				classPairs[i][j-1] = val
+			}
+		}
+	}
+	os.Mkdir("src", 0664)
+	os.Chdir("src")
+	classes := make([]*Class, len(classPairs))
+	done := new(sync.WaitGroup)
+	for i, val := range classPairs {
+		done.Add(1)
+		classes[i] = new(Class).Init(url+val[0], val[1], done)
+	}
+	done.Wait()
+}
+
+func twoDigit(num int) string {
+	result := ""
+	if num < 10 {
+		result = "0" + strconv.Itoa(num)
+	} else if num >= 100 {
+		result = twoDigit(num % 100)
+	}
+	return result
+}
