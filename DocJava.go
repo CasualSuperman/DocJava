@@ -20,8 +20,11 @@ import (
 	"sync"
 )
 
+var usage = "DocJava [-user USERNAME -pass PASSWORD] (-labID || -assignmentID) ID -semester SEMESTER -course COURSE"
+
 var user *string = flag.String("user", "", "HTTP username required for the page.")
 var pass *string = flag.String("pass", "", "HTTP password required for the page.")
+var url *string = flag.String("url", "", "Address to the JavaDoc root.")
 var labnum *int = flag.Int("labID", -1, "Lab number.")
 var semester *string = flag.String("semester", "spring11", "The semester")
 var course *string = flag.String("course", "cs151", "The course")
@@ -33,6 +36,7 @@ func main() {
 	if *user != "" && *pass != "" {
 		url = "http://" + *user + ":" + *pass + "@"
 	} else if *user != ""^*pass != "" {
+		fmt.Println(usage)
 		fmt.Println("You must either specify both a username and a password or neither.")
 		os.Exit(1)
 	}
@@ -43,6 +47,7 @@ func main() {
 	} else if *assignment > 0 {
 		url += "/assignments/assignment" + twoDigit(*assignment)
 	} else {
+		fmt.Println(usage)
 		fmt.Println("You must specify either an assignment or a lab.")
 		os.Exit(1)
 	}
