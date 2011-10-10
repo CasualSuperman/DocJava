@@ -35,7 +35,7 @@ func main() {
 	var url string
 	if *user != "" && *pass != "" {
 		url = "http://" + *user + ":" + *pass + "@"
-	} else if *user != ""^*pass != "" {
+	} else if u, p := (*user != ""), (*pass != ""); !(u && p) && !(!u && !p) {
 		fmt.Println(usage)
 		fmt.Println("You must either specify both a username and a password or neither.")
 		os.Exit(1)
