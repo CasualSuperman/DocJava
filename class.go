@@ -1,9 +1,9 @@
 package main
 
-type ClassMask Mask
+type ClassMask byte
 
 const (
-    cm_abstract  ClassMask = 1 << iota
+    cm_abstract ClassMask = 1 << iota
     cm_final
     cm_private
     cm_protected

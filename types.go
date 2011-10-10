@@ -1,16 +1,5 @@
 package main
 
-/*== Start Visibility ==*/
-type Visibility byte
-
-/*=== End Visibility ===*/
-
-// Static
-type Static bool
-
-//Final
-type Final bool
-
 type Doc string
 
 //Type
@@ -32,8 +21,6 @@ func (t Type) String() (s string) {
     }
     return
 }
-
-type Mask int
 
 const (
     public Mask = 1 << iota

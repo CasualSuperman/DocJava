@@ -1,9 +1,9 @@
 package main
 
-type FieldMask Mask
+type FieldMask byte
 
 const (
-    fm_final FieldMask = 1 << (iota + 3)
+    fm_final FieldMask = 1 << iota
     fm_private
     fm_protected
     fm_public
