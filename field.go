@@ -2,20 +2,24 @@ package main
 
 type FieldMask byte
 
-const (
-    fm_final FieldMask = 1 << iota
-    fm_private
-    fm_protected
-    fm_public
-    fm_static
-    fm_transient
-    fm_volatile
-)
+var fm_final, fm_private, fm_protected, fm_public, fm_static, fm_transient,
+    fm_volatile Mask
+
+func init() {
+    var i uint = 0
+    fm_final     := Mask{1 << i, "Final"}
+    fm_private   := Mask{1 << i, "Private"}
+    fm_protected := Mask{1 << i, "Protected"}
+    fm_public    := Mask{1 << i, "Public"}
+    fm_static    := Mask{1 << i, "Static"}
+    fm_transient := Mask{1 << i, "Transient"}
+    fm_volatile  := Mask{1 << i, "Volatile"}
+}
 
 // Page 196 of the Java Specification 3
 // Section 8.3
 type Field struct {
-    fieldModifiers fMod // Optional
+    fieldModifiers Maskable // Optional
     fieldType Type
     // Name in this case, can include a declaration but won't in the JavaDoc
     // context
@@ -34,30 +38,30 @@ type fMod byte
 
 func (f fMod) String() (s string) {
     mask := f
-    if (mask.has(fm_public)) {
+    if (mask.Has(fm_public)) {
         s += "public"
-    } else if (mask.has(fm_private)) {
+    } else if (mask.Has(fm_private)) {
         s += "private"
-    } else if (mask.has(fm_protected)) {
+    } else if (mask.Has(fm_protected)) {
         s += "protected"
     }
 
-    if (mask.has(fm_final)) {
+    if (mask.Has(fm_final)) {
         s = "final " + s
     }
 
-    if (mask.has(fm_static)) {
+    if (mask.Has(fm_static)) {
         s += " static"
     }
-    if (mask.has(fm_transient)) {
+    if (mask.Has(fm_transient)) {
         s += " transient"
     }
-    if (mask.has(fm_volatile)) {
+    if (mask.Has(fm_volatile)) {
         s += " volatile"
     }
     return
 }
 
-func (f fMod) has(mask FieldMask) bool {
-    return (int(mask) & int(f)) == 0
+func (f fMod) Has(mask Mask) bool {
+    return (mask.mask & int(f)) == 0
 }
