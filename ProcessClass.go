@@ -1,5 +1,5 @@
 package main
-
+/*
 import (
 	"http"
 	"io/ioutil"
@@ -7,12 +7,12 @@ import (
 	"sync"
 	"time"
 )
-
+*/
 const (
 	STARTCLASS = "<!-- ======== START OF CLASS DATA ======== -->"
 	ENDCLASS   = "<!-- ========= END OF CLASS DATA ========= -->"
 )
-
+/*
 func (c *Class) Init(docUrl, className string, done *sync.WaitGroup) *Class {
 	doc, _ := http.Get(docUrl)
 	data, _ := ioutil.ReadAll(doc.Body)
@@ -28,3 +28,4 @@ func (c *Class) Init(docUrl, className string, done *sync.WaitGroup) *Class {
 	c.Name = className
 	return c
 }
+*/

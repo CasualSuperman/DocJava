@@ -60,11 +60,13 @@ func main() {
 	}
 	os.Mkdir("src", 0664)
 	os.Chdir("src")
-	classes := make([]*Class, len(classPairs))
+//	classes := make([]*Class, len(classPairs))
 	done := new(sync.WaitGroup)
 	for i, val := range classPairs {
 		done.Add(1)
-		classes[i] = new(Class).Init(url+val[0], val[1], done)
+        if i == 0 || len(val) == 0 {
+        }
+//		classes[i] = new(Class).Init(url+val[0], val[1], done)
 	}
 	done.Wait()
 }

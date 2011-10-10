@@ -1,16 +1,25 @@
 package main
 
-type ClassMask byte
+var cm_abstract, cm_final, cm_private, cm_protected, cm_public, cm_static,
+    cm_strictfp Mask
 
-const (
-    cm_abstract ClassMask = 1 << iota
-    cm_final
-    cm_private
-    cm_protected
-    cm_public
-    cm_static
-    cm_strictfp
-)
+func init() {
+    var i uint = 0
+    cm_abstract  = Mask{1 << i, "abstract"}
+    i++
+    cm_final     = Mask{1 << i, "final"}
+    i++
+    cm_private   = Mask{1 << i, "private"}
+    i++
+    cm_protected = Mask{1 << i, "protected"}
+    i++
+    cm_public    = Mask{1 << i, "public"}
+    i++
+    cm_static    = Mask{1 << i, "static"}
+    i++
+    cm_strictfp  = Mask{1 << i, "strictfp"}
+    i++
+}
 
 // Page 175 of the Java Specification 3
 // Section 8.1

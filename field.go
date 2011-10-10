@@ -1,19 +1,24 @@
 package main
 
-type FieldMask byte
-
 var fm_final, fm_private, fm_protected, fm_public, fm_static, fm_transient,
     fm_volatile Mask
 
 func init() {
     var i uint = 0
-    fm_final     := Mask{1 << i, "Final"}
-    fm_private   := Mask{1 << i, "Private"}
-    fm_protected := Mask{1 << i, "Protected"}
-    fm_public    := Mask{1 << i, "Public"}
-    fm_static    := Mask{1 << i, "Static"}
-    fm_transient := Mask{1 << i, "Transient"}
-    fm_volatile  := Mask{1 << i, "Volatile"}
+    fm_final     = Mask{1 << i, "final"}
+    i++
+    fm_private   = Mask{1 << i, "private"}
+    i++
+    fm_protected = Mask{1 << i, "protected"}
+    i++
+    fm_public    = Mask{1 << i, "public"}
+    i++
+    fm_static    = Mask{1 << i, "static"}
+    i++
+    fm_transient = Mask{1 << i, "transient"}
+    i++
+    fm_volatile  = Mask{1 << i, "volatile"}
+    i++
 }
 
 // Page 196 of the Java Specification 3
