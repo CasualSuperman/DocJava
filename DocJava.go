@@ -20,8 +20,8 @@ import (
 	"sync"
 )
 
-var user *string = flag.String("user", "cs151-02", "HTTP username required for the page.")
-var pass *string = flag.String("pass", "javarocks11", "HTTP password required for the page.")
+var user *string = flag.String("user", "", "HTTP username required for the page.")
+var pass *string = flag.String("pass", "", "HTTP password required for the page.")
 var labnum *int = flag.Int("labID", -1, "Lab number.")
 var semester *string = flag.String("semester", "spring11", "The semester")
 var course *string = flag.String("course", "cs151", "The course")
@@ -29,7 +29,14 @@ var assignment *int = flag.Int("assignmentID", -1, "Assignment number")
 
 func main() {
 	flag.Parse()
-	url := "http://" + *user + ":" + *pass + "@polaris.cs.wcu.edu/" +
+	var url string
+	if *user != "" && *pass != "" {
+		url = "http://" + *user + ":" + *pass + "@"
+	} else if *user != ""^*pass != "" {
+		fmt.Println("You must either specify both a username and a password or neither.")
+		os.Exit(1)
+	}
+	url += "polaris.cs.wcu.edu/" +
 		"~adalton/teaching/" + *semester + "/" + *course
 	if *labnum > 0 {
 		url += "/labs/lab" + twoDigit(*labnum)
