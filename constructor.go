@@ -1,3 +1,3 @@
 package main
 
-type Constructor struct {}
+type Constructor struct{}

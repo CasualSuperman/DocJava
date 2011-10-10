@@ -1,3 +1,3 @@
 package main
 
-type Interface struct {}
+type Interface struct{}
