@@ -1,19 +1,46 @@
 package main
 
-type Visibility string
+/*== Start Visibility ==*/
+type Visibility byte
 
 const (
     private Visibility = iota
     protected
     public
 )
+/*=== End Visibility ===*/
+
+// Static
+type Static bool
+
+//Final
+type Final bool
 
 type Doc string
-type Type string
+
+//Type
+type Type struct {
+    typeDeclSpecifier string
+    typeArguments []*string // Optional
+}
+
+type Mask int
+
+const (
+    public Mask = 1 << iota
+    private
+    protected
+)
+
+const (
+    abstract FuncMask = 1 << (iota + 3)
+)
+
 type Variable struct{
     Name string
     Type Type
 }
+
 type Field struct{
     Variable
     Visibility
@@ -29,21 +56,27 @@ type Exception struct{
 type Function struct{
     Name string
     Arguments []Argument
-    Return Type
+    Returns Type
+    Visibility Visibility
     Description, Precondition, Postcondition, Returns string
     Exceptions []Exception
 }
 type Constructor Function
+/*
 type Class struct{
-    Name, Description, Note, Version string
-    Authors []string
+    // Java properties
+    Name string
     Methods []Function
     Constructors []Constructor
     Fields []Variable
-    SubClasses []Class
+    Extends []Class
+    Implements []Interface
+    // Doc properties
+    Description, Note, Version string
+    Authors []string
 }
-
-
+*/
+/*
 func (t *Type) Init(name string) *Type{
     *t = Type(name)
     return t
@@ -107,11 +140,6 @@ func (f *Function) AddDescription(doc string){
 func (c *Constructor) Init() *Constructor{
     return c
 }
-/*
-func (c *Class) Init(name string) *Class{
-    c.Name = name
-    return c
-}*/
 func (c *Class) AddMethod(Func Function){
     c.Methods = append(c.Methods, Func)
 }
@@ -136,3 +164,4 @@ func (c *Class) AddDescription(desc string){
 func (c *Class) AddNode(note string){
     c.Note = note
 }
+*/
