@@ -57,7 +57,7 @@ func NewField(text string) Field {
 	</DL>
 	</DL>
 	*/
-	regString := "<A NAME=\"([^\"]+)\"><!-- --></A><H3>\\n[^<]+</H3>\\n<PRE>\\n(([^<]*)<A HREF=\"[^\"]+\" title=\"[^\"]+\">([^<]+)</A>|([^ ]+) (int|float|java\\.lang\\.String|double|long|byte )) <B>[^<]+</B></PRE>\\n<DL>\\n<DD>(.+)\\n<P>"
+	regString := "<A NAME=\"([^\"]+)\"><!-- --></A><H3>\\n[^<]+</H3>\\n<PRE>\\n(.+)<B>[^<]+</B></PRE>\\n<DL>\\n<DD>(.+)\\n<P>"
 	fmt.Println(regString)
 	reg := regexp.MustCompile(regString)
 	results := reg.FindStringSubmatch(text)
