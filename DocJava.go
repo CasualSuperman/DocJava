@@ -11,13 +11,13 @@ package main
 */
 import (
 	"flag"
-	"fmt"
-	"http"
-	"io/ioutil"
-	"os"
-	"regexp"
+//	"fmt"
+//	"http"
+//	"io/ioutil"
+//	"os"
+//	"regexp"
 	"strconv"
-	"sync"
+//	"sync"
 )
 
 var usage = "DocJava [-user USERNAME -pass PASSWORD] (-labID || -assignmentID) ID -semester SEMESTER -course COURSE"
@@ -30,6 +30,7 @@ var semester *string = flag.String("semester", "spring11", "The semester")
 var course *string = flag.String("course", "cs151", "The course")
 var assignment *int = flag.Int("assignmentID", -1, "Assignment number")
 
+/*
 func main() {
 	flag.Parse()
 	var url string
@@ -82,7 +83,12 @@ func main() {
 	}
 	done.Wait()
 }
+*/
 
+func main() {
+    NewField("<A NAME=\"head\"><!-- --></A><H3>\nhead</H3>\n<PRE>\nprivate <A HREF=\"../../../../../edu/wcu/cs/cs363/project02/BoundedLinkedSet.ListNode.html\" title=\"class in edu.wcu.cs.cs363.project02\">BoundedLinkedSet.ListNode</A> <B>head</B></PRE>\n<DL>\n<DD>The start of the linked list.\n<P>\n<DL>\n</DL>\n</DL>\n<HR>")
+    NewField("<A NAME=\"capacity\"><!-- --></A><H3>\ncapacity</H3>\n<PRE>\nprivate int <B>capacity</B></PRE>\n<DL>\n<DD>The maximum number of elements to store in this\n <code>BoundedLinkedSet</code>.\n <P>\n <DL>\n </DL>\n </DL>")
+}
 func twoDigit(num int) string {
 	result := ""
 	if num < 10 {
