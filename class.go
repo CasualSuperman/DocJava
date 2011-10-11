@@ -29,8 +29,8 @@ type Class struct {
 	// string "Class"
 	identifier     string
 	typeParameters Type
-	super          string       // Optional
-	interfaces     []*Interface // Optional
+	super          string    // Optional
+	interfaces     []*string // Optional
 	// Body
 	// []*ClassBodyDeclaration
 	fieldDeclarations       []*Field

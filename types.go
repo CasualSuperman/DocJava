@@ -1,6 +1,7 @@
 package main
 
-//Type
+// Page 184 of the Java Specification 3
+// Section 8.1.4
 type Type struct {
 	typeDeclSpecifier string
 	typeArguments     []string // Optional
