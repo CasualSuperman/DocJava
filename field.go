@@ -1,8 +1,8 @@
 package main
 
 import (
-    "fmt"
-    "regexp"
+	"fmt"
+	"regexp"
 )
 
 var fm_final, fm_private, fm_protected, fm_public, fm_static, fm_transient,
@@ -46,26 +46,26 @@ func (f Field) String() (s string) {
 
 func NewField(text string) Field {
 	/*
-	<A NAME="head"><!-- --></A><H3>
-	head</H3>
-	<PRE>
-	private <A HREF="../../../../../edu/wcu/cs/cs363/project02/BoundedLinkedSet.ListNode.html" title="class in edu.wcu.cs.cs363.project02">BoundedLinkedSet.ListNode</A> <B>head</B></PRE>
-	<DL>
-	<DD>The start of the linked list.
-	<P>
-	<DL>
-	</DL>
-	</DL>
+		<A NAME="head"><!-- --></A><H3>
+		head</H3>
+		<PRE>
+		private <A HREF="../../../../../edu/wcu/cs/cs363/project02/BoundedLinkedSet.ListNode.html" title="class in edu.wcu.cs.cs363.project02">BoundedLinkedSet.ListNode</A> <B>head</B></PRE>
+		<DL>
+		<DD>The start of the linked list.
+		<P>
+		<DL>
+		</DL>
+		</DL>
 	*/
 	regString := "<A NAME=\"([^\"]+)\"><!-- --></A><H3>\\n[^<]+</H3>\\n<PRE>\\n(.+)<B>[^<]+</B></PRE>\\n<DL>\\n<DD>(.+)\\n<P>"
 	fmt.Println(regString)
 	reg := regexp.MustCompile(regString)
 	results := reg.FindStringSubmatch(text)
-    for i := 0; i < len(results); i++ {
-        fmt.Println("{")
-        fmt.Println("\t\"",results[i], "\"")
-        fmt.Println("}")
-    }
+	for i := 0; i < len(results); i++ {
+		fmt.Println("{")
+		fmt.Println("\t\"", results[i], "\"")
+		fmt.Println("}")
+	}
 	/*
 	 * 1) Field name
 	 * 2) Modifiers
@@ -76,7 +76,7 @@ func NewField(text string) Field {
 	vis := regexp.MustCompile(visibilityString)
 	visibility := vis.FindString(results[2])
 	fmt.Println(visibility)
-    return Field{}
+	return Field{}
 }
 
 /* Implementing Mask Interface */
