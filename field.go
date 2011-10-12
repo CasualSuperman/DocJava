@@ -64,40 +64,17 @@ func javaDoc(s string) string {
 }
 
 func NewField(text string) Field {
-	/*
-		<A NAME="head"><!-- --></A><H3>
-		head</H3>
-		<PRE>
-		private <A HREF="../../../../../edu/wcu/cs/cs363/project02/BoundedLinkedSet.ListNode.html" title="class in edu.wcu.cs.cs363.project02">BoundedLinkedSet.ListNode</A> <B>head</B></PRE>
-		<DL>
-		<DD>The start of the linked list.
-		<P>
-		<DL>
-		</DL>
-		</DL>
-	*/
+    // Pull out name and doc, leave mods and type together
 	regString := "<A NAME=\"([^\"]+)\"><!-- --></A><H3>\\n[^<]+</H3>\\n<PRE>\\n(.+)<B>[^<]+</B></PRE>\\n<DL>\\n<DD>(.+)\\n<P>"
-	//	fmt.Println(regString)
 	reg := regexp.MustCompile(regString)
 	results := reg.FindStringSubmatch(text)
-	//	for i := 1; i < len(results); i++ {
-	//		fmt.Println("{")
-	//		fmt.Println("\t\"", results[i], "\"")
-	//		fmt.Println("}")
-	//	}
-	/*
-	 * 1) Field name
-	 * 2) Modifiers
-	 * 3) Type
-	 * 4) Description
-	 */
-	/*	visibilityString := "public|private|protected"
-		vis := regexp.MustCompile(visibilityString)
-		visibility := vis.FindString(results[2])
-	*/
+
+    // For scoping
 	field_perms := ""
 	field_type := ""
 	line := results[2]
+
+    // Two options
 	if strings.Contains(line, "<") {
 		// URL with type enclosed
 		temp := strings.SplitN(line, "<", 2)
@@ -118,8 +95,7 @@ func NewField(text string) Field {
 	}
 	field_type = strings.Trim(field_type, " ")
 	mod := NewFMod(field_perms)
-	//    fmt.Println(field_perms)
-	return Field{fieldModifiers: mod, fieldType: field_type, variableDeclarator: results[1], javaDoc: results[3]}
+	return Field{mod, field_type, results[1], results[3]}
 }
 
 /* Implementing Mask Interface */

@@ -3,6 +3,8 @@ package main
 var cm_abstract, cm_final, cm_private, cm_protected, cm_public, cm_static,
 	cm_strictfp Mask
 
+var cm_mods []Mask
+
 func init() {
 	var i uint = 0
 	cm_abstract = Mask{1 << i, "abstract"}
@@ -19,6 +21,7 @@ func init() {
 	i++
 	cm_strictfp = Mask{1 << i, "strictfp"}
 	i++
+    cm_mods = append(cm_mods, cm_abstract, cm_final, cm_private, cm_protected, cm_public, cm_static, cm_strictfp)
 }
 
 // Page 175 of the Java Specification 3
@@ -30,14 +33,14 @@ type Class struct {
 	identifier     string
 	typeParameters Type
 	super          string    // Optional
-	interfaces     []*string // Optional
+	interfaces     []string // Optional
 	// Body
 	// []*ClassBodyDeclaration
-	fieldDeclarations       []*Field
-	constructorDeclarations []*Constructor
-	methodDeclarations      []*Method
-	classDeclarations       []*Class
-	interfaceDeclarations   []*Interface
+	fieldDeclarations       []Field
+	constructorDeclarations []Constructor
+	methodDeclarations      []Method
+	classDeclarations       []Class
+	interfaceDeclarations   []Interface
 }
 
 /* ClassBodyDeclaration
