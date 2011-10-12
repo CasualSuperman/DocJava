@@ -4,17 +4,17 @@ package main
 // Section 8.1.4
 type Type struct {
 	typeDeclSpecifier string
-	typeArguments     []string // Optional
+	typeArguments     []Type // Optional
 }
 
 func (t Type) String() (s string) {
 	s += t.typeDeclSpecifier
 	if len(t.typeArguments) > 0 {
 		s += "<"
-		s += t.typeArguments[0]
+		s += t.typeArguments[0].String()
 		for i := 1; i < len(t.typeArguments); i++ {
 			s += ", "
-			s += t.typeArguments[i]
+			s += t.typeArguments[i].String()
 		}
 		s += ">"
 	}
