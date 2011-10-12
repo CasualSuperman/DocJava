@@ -83,8 +83,8 @@ func NewField(text string) Field {
 		remove := regexp.MustCompile(replace)
 		result := remove.ReplaceAllString(temp_type, "")
 		// These aren't actually needed, htmlelems will already be escaped.
-//		result = strings.Replace(result, "&gt;", ">", -1)
-//		result = strings.Replace(result, "&lt;", "<", -1)
+		//		result = strings.Replace(result, "&gt;", ">", -1)
+		//		result = strings.Replace(result, "&lt;", "<", -1)
 		field_type = regexp.MustCompile("^|[^<]+\\.").ReplaceAllString(result, "")
 	} else {
 		// Builtin type
