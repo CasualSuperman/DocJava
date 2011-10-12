@@ -6,7 +6,7 @@ type Mask struct {
 }
 
 func (m Mask) Value() int {
-    return m.mask
+	return m.mask
 }
 
 func (m Mask) String() (s string) {
@@ -16,6 +16,6 @@ func (m Mask) String() (s string) {
 
 type Maskable interface {
 	Has(m Mask) bool
-    Set(m Mask, on bool)
+	Set(m Mask, on bool)
 	String() string
 }

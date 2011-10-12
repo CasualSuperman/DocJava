@@ -1,9 +1,9 @@
 package main
 
 import (
-//	"fmt"
+	//	"fmt"
 	"regexp"
-    "strings"
+	"strings"
 )
 
 var fm_final, fm_private, fm_protected, fm_public, fm_static, fm_transient,
@@ -27,8 +27,8 @@ func init() {
 	i++
 	fm_volatile = Mask{1 << i, "volatile"}
 	i++
-    fm_masks = append(fm_masks, fm_final, fm_private, fm_protected, fm_public,
-                                fm_static, fm_transient, fm_volatile)
+	fm_masks = append(fm_masks, fm_final, fm_private, fm_protected, fm_public,
+		fm_static, fm_transient, fm_volatile)
 }
 
 // Page 196 of the Java Specification 3
@@ -40,27 +40,27 @@ type Field struct {
 	// context
 	variableDeclarator string
 	// string ";"
-    javaDoc string
+	javaDoc string
 }
 
 func (f Field) String() (s string) {
-    s += "/**\n * "
-    s += javaDoc(f.javaDoc)
-    s += "\n */\n"
+	s += "/**\n * "
+	s += javaDoc(f.javaDoc)
+	s += "\n */\n"
 	s += f.fieldModifiers.String()
-    s += " "
+	s += " "
 	s += f.fieldType
-    s += " "
-    s += f.variableDeclarator
+	s += " "
+	s += f.variableDeclarator
 	s += ";"
 	return
 }
 
 func javaDoc(s string) string {
-    s = strings.Replace(s, ">", "&gt;", -1)
-    s = strings.Replace(s, "<", "&lt;", -1)
-    s = strings.Replace(s, "\n", "\n * ", -1)
-    return s
+	s = strings.Replace(s, ">", "&gt;", -1)
+	s = strings.Replace(s, "<", "&lt;", -1)
+	s = strings.Replace(s, "\n", "\n * ", -1)
+	return s
 }
 
 func NewField(text string) Field {
@@ -77,47 +77,47 @@ func NewField(text string) Field {
 		</DL>
 	*/
 	regString := "<A NAME=\"([^\"]+)\"><!-- --></A><H3>\\n[^<]+</H3>\\n<PRE>\\n(.+)<B>[^<]+</B></PRE>\\n<DL>\\n<DD>(.+)\\n<P>"
-//	fmt.Println(regString)
+	//	fmt.Println(regString)
 	reg := regexp.MustCompile(regString)
 	results := reg.FindStringSubmatch(text)
-//	for i := 1; i < len(results); i++ {
-//		fmt.Println("{")
-//		fmt.Println("\t\"", results[i], "\"")
-//		fmt.Println("}")
-//	}
+	//	for i := 1; i < len(results); i++ {
+	//		fmt.Println("{")
+	//		fmt.Println("\t\"", results[i], "\"")
+	//		fmt.Println("}")
+	//	}
 	/*
 	 * 1) Field name
 	 * 2) Modifiers
 	 * 3) Type
 	 * 4) Description
 	 */
-/*	visibilityString := "public|private|protected"
-	vis := regexp.MustCompile(visibilityString)
-	visibility := vis.FindString(results[2])
-*/
-    field_perms := ""
-    field_type := ""
-    line := results[2]
-    if strings.Contains(line, "<") {
-        // URL with type enclosed
-        temp := strings.SplitN(line, "<", 2)
-        field_perms = temp[0]
-        temp_type := "<" + temp[1]
-        replace := "</?A[^>]*>"
-        remove := regexp.MustCompile(replace)
-        result := remove.ReplaceAllString(temp_type, "")
-        result = strings.Replace(result, "&gt;", ">", -1)
-        field_type = strings.Replace(result, "&lt;", "<", -1)
-    } else {
-        // Builtin type
-        temp_type := strings.Trim(line, " ")
-        index := strings.LastIndex(temp_type, " ")
-        field_perms = temp_type[0:index]
-        field_type = temp_type[index+1:len(temp_type)]
-    }
-    field_type = strings.Trim(field_type, " ")
-    mod := NewFMod(field_perms)
-//    fmt.Println(field_perms)
+	/*	visibilityString := "public|private|protected"
+		vis := regexp.MustCompile(visibilityString)
+		visibility := vis.FindString(results[2])
+	*/
+	field_perms := ""
+	field_type := ""
+	line := results[2]
+	if strings.Contains(line, "<") {
+		// URL with type enclosed
+		temp := strings.SplitN(line, "<", 2)
+		field_perms = temp[0]
+		temp_type := "<" + temp[1]
+		replace := "</?A[^>]*>"
+		remove := regexp.MustCompile(replace)
+		result := remove.ReplaceAllString(temp_type, "")
+		result = strings.Replace(result, "&gt;", ">", -1)
+		field_type = strings.Replace(result, "&lt;", "<", -1)
+	} else {
+		// Builtin type
+		temp_type := strings.Trim(line, " ")
+		index := strings.LastIndex(temp_type, " ")
+		field_perms = temp_type[0:index]
+		field_type = temp_type[index+1 : len(temp_type)]
+	}
+	field_type = strings.Trim(field_type, " ")
+	mod := NewFMod(field_perms)
+	//    fmt.Println(field_perms)
 	return Field{fieldModifiers: mod, fieldType: field_type, variableDeclarator: results[1], javaDoc: results[3]}
 }
 
@@ -126,13 +126,13 @@ func NewField(text string) Field {
 type fMod int
 
 func NewFMod(list string) (f *fMod) {
-    f = new(fMod)
-    for i := 0; i < len(fm_masks); i++ {
-        if strings.Contains(list, fm_masks[i].String()) {
-            f.Set(fm_masks[i], true)
-        }
-    }
-    return
+	f = new(fMod)
+	for i := 0; i < len(fm_masks); i++ {
+		if strings.Contains(list, fm_masks[i].String()) {
+			f.Set(fm_masks[i], true)
+		}
+	}
+	return
 }
 
 func (f *fMod) String() (s string) {
@@ -165,9 +165,9 @@ func (f *fMod) Has(mask Mask) bool {
 }
 
 func (f *fMod) Set(mask Mask, on bool) {
-    if on && ! f.Has(mask) {
-        *f = fMod(int(*f) ^ mask.mask)
-    } else if !on && f.Has(mask) {
-        *f = fMod(int(*f) | mask.mask)
-    }
+	if on && !f.Has(mask) {
+		*f = fMod(int(*f) ^ mask.mask)
+	} else if !on && f.Has(mask) {
+		*f = fMod(int(*f) | mask.mask)
+	}
 }
