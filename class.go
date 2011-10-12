@@ -21,7 +21,7 @@ func init() {
 	i++
 	cm_strictfp = Mask{1 << i, "strictfp"}
 	i++
-    cm_mods = append(cm_mods, cm_abstract, cm_final, cm_private, cm_protected, cm_public, cm_static, cm_strictfp)
+	cm_mods = append(cm_mods, cm_abstract, cm_final, cm_private, cm_protected, cm_public, cm_static, cm_strictfp)
 }
 
 // Page 175 of the Java Specification 3
@@ -32,7 +32,7 @@ type Class struct {
 	// string "Class"
 	identifier     string
 	typeParameters Type
-	super          string    // Optional
+	super          string   // Optional
 	interfaces     []string // Optional
 	// Body
 	// []*ClassBodyDeclaration

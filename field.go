@@ -64,17 +64,17 @@ func javaDoc(s string) string {
 }
 
 func NewField(text string) Field {
-    // Pull out name and doc, leave mods and type together
+	// Pull out name and doc, leave mods and type together
 	regString := "<A NAME=\"([^\"]+)\"><!-- --></A><H3>\\n[^<]+</H3>\\n<PRE>\\n(.+)<B>[^<]+</B></PRE>\\n<DL>\\n<DD>(.+)\\n<P>"
 	reg := regexp.MustCompile(regString)
 	results := reg.FindStringSubmatch(text)
 
-    // For scoping
+	// For scoping
 	field_perms := ""
 	field_type := ""
 	line := results[2]
 
-    // Two options
+	// Two options
 	if strings.Contains(line, "<") {
 		// URL with type enclosed
 		temp := strings.SplitN(line, "<", 2)
@@ -85,7 +85,7 @@ func NewField(text string) Field {
 		result := remove.ReplaceAllString(temp_type, "")
 		result = strings.Replace(result, "&gt;", ">", -1)
 		field_type = strings.Replace(result, "&lt;", "<", -1)
-        field_type = regexp.MustCompile("^|[^<]+\\.").ReplaceAllString(field_type, "")
+		field_type = regexp.MustCompile("^|[^<]+\\.").ReplaceAllString(field_type, "")
 	} else {
 		// Builtin type
 		temp_type := strings.Trim(line, " ")
