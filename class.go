@@ -31,7 +31,7 @@ type Class struct {
 	classModifiers byte //Optional
 	// string "Class"
 	identifier     string
-	typeParameters Type
+	typeParameters Type // Optional?
 	super          string   // Optional
 	interfaces     []string // Optional
 	// Body
