@@ -112,8 +112,8 @@ func NewField(text string) Field {
 		// Builtin type
 		temp_type := strings.Trim(line, " ")
 		index := strings.LastIndex(temp_type, " ")
-		field_perms = temp_type[0:index]
-		field_type = temp_type[index+1 : len(temp_type)]
+		field_perms = temp_type[:index]
+		field_type = temp_type[index+1:]
 	}
 	field_type = strings.Trim(field_type, " ")
 	mod := NewFMod(field_perms)
