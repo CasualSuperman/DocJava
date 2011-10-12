@@ -1,6 +1,6 @@
 package main
 
 type Argument struct {
-    argName string
-    argType Type
+	argName string
+	argType Type
 }
