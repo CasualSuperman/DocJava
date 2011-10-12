@@ -20,12 +20,12 @@ func init() {
 	im_mods = append(im_mods, im_abstract, im_public, im_private, im_protected, im_static, im_strictfp)
 }
 
-type Interface struct{
+type Interface struct {
 	iModifiers byte //Optional
 	// interface
-	iIdentifier string
-	iTypeParameters Type // Optional
-	iExtends []string // Optional
+	iIdentifier     string
+	iTypeParameters Type     // Optional
+	iExtends        []string // Optional
 	// {
 	// Body
 	// }
