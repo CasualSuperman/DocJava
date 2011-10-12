@@ -108,6 +108,7 @@ func NewField(text string) Field {
 		result := remove.ReplaceAllString(temp_type, "")
 		result = strings.Replace(result, "&gt;", ">", -1)
 		field_type = strings.Replace(result, "&lt;", "<", -1)
+        field_type = regexp.MustCompile("^|[^<]+\\.").ReplaceAllString(field_type, "")
 	} else {
 		// Builtin type
 		temp_type := strings.Trim(line, " ")
