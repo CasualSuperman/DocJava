@@ -79,9 +79,8 @@ func NewField(text string) Field {
 		replace := "</?a[^>]*>"
 		remove := regexp.MustCompile(replace)
 		uType = remove.ReplaceAllString(uType, "")
-		// These aren't actually needed, htmlelems will already be escaped.
-		//		result = strings.Replace(result, "&gt;", ">", -1)
-		//		result = strings.Replace(result, "&lt;", "<", -1)
+		uType = strings.Replace(uType, "&gt;", ">", -1)
+		uType = strings.Replace(uType, "&lt;", "<", -1)
 		sType = regexp.MustCompile("^|[^<]+\\.").ReplaceAllString(uType, "")
 		/*	} else {
 			// Builtin type
