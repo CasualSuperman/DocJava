@@ -44,7 +44,7 @@ type Field struct {
 
 func (f Field) String() (s string) {
 	s += "/**\n * "
-	s += f.javaDoc
+	s += javaDoc(f.javaDoc)
 	s += "\n */\n"
 	s += f.fieldModifiers.String()
 	s += " "
@@ -56,15 +56,15 @@ func (f Field) String() (s string) {
 }
 
 func javaDoc(s string) string {
-	s = strings.Replace(s, ">", "&gt;", -1)
-	s = strings.Replace(s, "<", "&lt;", -1)
+//	s = strings.Replace(s, ">", "&gt;", -1)
+//	s = strings.Replace(s, "<", "&lt;", -1)
 	s = strings.Replace(s, "\n", "\n * ", -1)
 	return s
 }
 
 func NewField(text string) Field {
 	// Pull out name and doc, leave mods and type together
-	regString := "<pre>([^&]+)&nbsp;([^ ]+) ([^<]+)</pre>\n<div[^>]*>(.*)</div>"
+	regString := "<pre>([^&]+)&nbsp;(.+) ([^ ]+)</pre>\n<div[^>]*>(.*)</div>"
 	reg := regexp.MustCompile(regString)
 	results := reg.FindStringSubmatch(text)
 
@@ -73,16 +73,16 @@ func NewField(text string) Field {
 	sType := ""
 	name := results[3]
 	docs := results[4]
-	// Two options
+	// If not a basic type
 	if strings.Contains(uType, "<") {
 		// URL with type enclosed
-		replace := "</?A[^>]*>"
+		replace := "</?a[^>]*>"
 		remove := regexp.MustCompile(replace)
-		result := remove.ReplaceAllString(uType, "")
+		uType = remove.ReplaceAllString(uType, "")
 		// These aren't actually needed, htmlelems will already be escaped.
 		//		result = strings.Replace(result, "&gt;", ">", -1)
 		//		result = strings.Replace(result, "&lt;", "<", -1)
-		sType = regexp.MustCompile("^|[^<]+\\.").ReplaceAllString(result, "")
+		sType = regexp.MustCompile("^|[^<]+\\.").ReplaceAllString(uType, "")
 		/*	} else {
 			// Builtin type
 			sType := strings.Trim(uType, " ")
