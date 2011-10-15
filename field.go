@@ -71,7 +71,7 @@ func NewField(text string) Field {
 	mods := results[1]
 	uType := results[2]
 	sType := ""
-	name := results[3]
+	name := strings.Replace(results[3], " ", "", -1)
 	docs := results[4]
 	// If not a basic type
 	if strings.Contains(uType, "<") {
@@ -86,6 +86,8 @@ func NewField(text string) Field {
 			// Builtin type
 			sType := strings.Trim(uType, " ")
 		*/
+	} else {
+		sType = strings.Replace(uType, " ", "", -1)
 	}
 	mod := NewFMod(mods)
 	return Field{mod, sType, name, docs}
