@@ -44,7 +44,7 @@ type Field struct {
 
 func (f Field) String() (s string) {
 	s += "/**\n * "
-	s += javaDoc(f.javaDoc)
+	s += f.javaDoc
 	s += "\n */\n"
 	s += f.fieldModifiers.String()
 	s += " "
@@ -64,38 +64,32 @@ func javaDoc(s string) string {
 
 func NewField(text string) Field {
 	// Pull out name and doc, leave mods and type together
-	regString := "<A NAME=\"([^\"]+)\"><!-- --></A><H3>\\n[^<]+</H3>\\n<PRE>\\n(.+)<B>[^<]+</B></PRE>\\n<DL>\\n<DD>(.+)\\n<P>"
+	regString := "<pre>([^&]+)&nbsp;([^ ]+) ([^<]+)</pre>\n<div[^>]*>(.*)</div>"
 	reg := regexp.MustCompile(regString)
 	results := reg.FindStringSubmatch(text)
 
-	// For scoping
-	field_perms := ""
-	field_type := ""
-	line := results[2]
-
+	mods := results[1]
+	uType := results[2]
+	sType := ""
+	name := results[3]
+	docs := results[4]
 	// Two options
-	if strings.Contains(line, "<") {
+	if strings.Contains(uType, "<") {
 		// URL with type enclosed
-		temp := strings.SplitN(line, "<", 2)
-		field_perms = temp[0]
-		temp_type := "<" + temp[1]
 		replace := "</?A[^>]*>"
 		remove := regexp.MustCompile(replace)
-		result := remove.ReplaceAllString(temp_type, "")
+		result := remove.ReplaceAllString(uType, "")
 		// These aren't actually needed, htmlelems will already be escaped.
 		//		result = strings.Replace(result, "&gt;", ">", -1)
 		//		result = strings.Replace(result, "&lt;", "<", -1)
-		field_type = regexp.MustCompile("^|[^<]+\\.").ReplaceAllString(result, "")
-	} else {
-		// Builtin type
-		temp_type := strings.Trim(line, " ")
-		index := strings.LastIndex(temp_type, " ")
-		field_perms = temp_type[:index]
-		field_type = temp_type[index+1:]
+		sType = regexp.MustCompile("^|[^<]+\\.").ReplaceAllString(result, "")
+		/*	} else {
+			// Builtin type
+			sType := strings.Trim(uType, " ")
+		*/
 	}
-	field_type = strings.Trim(field_type, " ")
-	mod := NewFMod(field_perms)
-	return Field{mod, field_type, results[1], results[3]}
+	mod := NewFMod(mods)
+	return Field{mod, sType, name, docs}
 }
 
 /* Implementing Mask Interface */
@@ -121,12 +115,11 @@ func (f *fMod) String() (s string) {
 		s += "protected"
 	}
 
-	if f.Has(fm_final) {
-		s = "final " + s
-	}
-
 	if f.Has(fm_static) {
 		s += " static"
+	}
+	if f.Has(fm_final) {
+		s += " final"
 	}
 	if f.Has(fm_transient) {
 		s += " transient"
