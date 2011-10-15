@@ -90,11 +90,12 @@ func main() {
 	fmt.Println(a)
 	b := NewField("<a name=\"data\">\n<!--   -->\n</a>\n<ul class=\"blockListLast\">\n<li class=\"blockList\">\n<h4>data</h4>\n<pre>private&nbsp;<a href=\"../../../../../edu/wcu/cs/cs363/project02/BoundedArraySet.html\" title=\"type parameter in BoundedArraySet\">T</a>[] data</pre>\n<div class=\"block\">The storage for the elements in this <code>BoundedArraySet</code>. Not\nall elements must be used.</div>\n</li>\n </ul>\n")
 	fmt.Println(b)
-/*	c := NewField("")
-	fmt.Println(c)
-	d := NewField("")
-	fmt.Println(d)
-*/}
+	/*	c := NewField("")
+		fmt.Println(c)
+		d := NewField("")
+		fmt.Println(d)
+	*/
+}
 
 func twoDigit(num int) string {
 	result := ""

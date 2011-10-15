@@ -56,8 +56,8 @@ func (f Field) String() (s string) {
 }
 
 func javaDoc(s string) string {
-//	s = strings.Replace(s, ">", "&gt;", -1)
-//	s = strings.Replace(s, "<", "&lt;", -1)
+	//	s = strings.Replace(s, ">", "&gt;", -1)
+	//	s = strings.Replace(s, "<", "&lt;", -1)
 	s = strings.Replace(s, "\n", "\n * ", -1)
 	return s
 }
