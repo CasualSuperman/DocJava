@@ -36,6 +36,11 @@ type conDeclarator struct {
 	// )
 }
 
+func NewConstructor(input string) Constructor {
+	// PLACEHOLDER
+	return Constructor{}
+}
+
 type cMod int
 
 func NewCMod(list string) (c *cMod) {
