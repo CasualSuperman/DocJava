@@ -39,7 +39,7 @@ type Field struct {
 	// context
 	variableDeclarator string
 	// string ";"
-	javaDoc string
+	javaDoc JavaDoc
 }
 
 func (f Field) String() (s string) {
@@ -55,16 +55,15 @@ func (f Field) String() (s string) {
 	return
 }
 
-func javaDoc(s string) string {
+func javaDoc(s JavaDoc) string {
 	//	s = strings.Replace(s, ">", "&gt;", -1)
 	//	s = strings.Replace(s, "<", "&lt;", -1)
-	s = strings.Replace(s, "\n", "\n * ", -1)
-	return s
+	return strings.Replace(s.String(), "\n", "\n * ", -1)
 }
 
 func NewField(text string) Field {
 	// Pull out name and doc, leave mods and type together
-	regString := "<pre>([^&]+)&nbsp;(.+) ([^ ]+)</pre>\n<div[^>]*>(.*)</div>"
+	regString := "<pre>([^&]+)&nbsp;(.+) ([^ ]+)</pre>\n(<div[^>]*>.*</div>.*)\n</li>\n</ul>"
 	reg := regexp.MustCompile(regString)
 	results := reg.FindStringSubmatch(text)
 
@@ -72,7 +71,7 @@ func NewField(text string) Field {
 	uType := results[2]
 	sType := NewType(uType)
 	name := strings.Replace(results[3], " ", "", -1)
-	docs := results[4]
+	docs := NewDoc(results[4])
 	mod := NewFMod(mods)
 	return Field{mod, sType, name, docs}
 }
