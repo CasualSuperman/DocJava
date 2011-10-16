@@ -34,7 +34,7 @@ func init() {
 // Section 8.3
 type Field struct {
 	fieldModifiers Maskable // Optional
-	fieldType      string
+	fieldType      Type
 	// Name in this case, can include a declaration but won't in the JavaDoc
 	// context
 	variableDeclarator string
@@ -48,7 +48,7 @@ func (f Field) String() (s string) {
 	s += "\n */\n"
 	s += f.fieldModifiers.String()
 	s += " "
-	s += f.fieldType
+	s += f.fieldType.String()
 	s += " "
 	s += f.variableDeclarator
 	s += ";"
@@ -70,25 +70,9 @@ func NewField(text string) Field {
 
 	mods := results[1]
 	uType := results[2]
-	sType := ""
+	sType := NewType(uType)
 	name := strings.Replace(results[3], " ", "", -1)
 	docs := results[4]
-	// If not a basic type
-	if strings.Contains(uType, "<") {
-		// URL with type enclosed
-		replace := "</?a[^>]*>"
-		remove := regexp.MustCompile(replace)
-		uType = remove.ReplaceAllString(uType, "")
-		uType = strings.Replace(uType, "&gt;", ">", -1)
-		uType = strings.Replace(uType, "&lt;", "<", -1)
-		sType = regexp.MustCompile("^|[^<]+\\.").ReplaceAllString(uType, "")
-		/*	} else {
-			// Builtin type
-			sType := strings.Trim(uType, " ")
-		*/
-	} else {
-		sType = strings.Replace(uType, " ", "", -1)
-	}
 	mod := NewFMod(mods)
 	return Field{mod, sType, name, docs}
 }
