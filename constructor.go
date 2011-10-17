@@ -1,6 +1,9 @@
 package main
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
 var cn_public, cn_private, cn_protected Mask
 var cn_masks []Mask
@@ -21,7 +24,6 @@ func init() {
 type Constructor struct {
 	constructorModifiers Maskable // Optional
 	typeParameters       string   // Optional
-	typeTypes            Type
 	// (
 	formalParameterList []Argument // Optional
 	// )
@@ -30,11 +32,18 @@ type Constructor struct {
 	// {
 	// Body
 	// }
+	doc JavaDoc
 }
 
 func NewConstructor(input string) Constructor {
 	// PLACEHOLDER
-	return Constructor{}
+	data := regexp.MustCompile("<h4>([^<]+)</h4>\\n<pre>([^<]+)</pre>(<div.+)\n</li>\n</ul>").FindStringSubmatch(input)
+	name := data[1]
+	def := data[2]
+	mod := NewCMod(strings.SplitN(def, "&nbsp;", 2)[1])
+	doc := NewDoc(data[3])
+	types := NewArgList(regexp.MustCompile("\\((.*)\\)").FindStringSubmatch(def)[1])
+	return Constructor{mod, name, types, "", doc}
 }
 
 type cMod int
