@@ -85,6 +85,14 @@ func main() {
 }
 */
 
+func debugPrint(data ...string) {
+	fmt.Println("{")
+	for i := 1; i < len(data); i++ {
+		fmt.Println("\t", data[i])
+	}
+	fmt.Println("}")
+}
+
 func main() {
 	a := NewField("<a name=\"DEFAULT_CAPACITY_1\">\n<!--   -->\n</a>\n<ul class=\"blockList\">\n<li class=\"blockList\">\n<h4>DEFAULT_CAPACITY_1</h4>\n<pre>protected static final&nbsp;int DEFAULT_CAPACITY_1</pre>\n<div class=\"block\">The default capacity for <code>set1</code>.</div>\n<dl><dt><span class=\"strong\">See Also:</span></dt><dd><a href=\"../../../../../constant-values.html#edu.wcu.cs.cs363.project02.AbstractBoundedSetTest.DEFAULT_CAPACITY_2\">Constant Field Values</a></dd></dl>\n</li>\n</ul>")
 	fmt.Println(a, "\n")

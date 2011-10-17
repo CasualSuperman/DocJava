@@ -35,15 +35,38 @@ type Constructor struct {
 	doc JavaDoc
 }
 
+func (c Constructor) String() (s string) {
+	s += "/**\n * "
+	s += javaDoc(c.doc)
+	s += "\n */\n"
+	s += c.constructorModifiers.String()
+	s += " "
+	s += c.typeParameters
+	s += "("
+	for i := 0; i < len(c.formalParameterList); i++ {
+		if i > 0 {
+			s += ", "
+		}
+		s += c.formalParameterList[i].String()
+	}
+	s += ") {"
+	s += "\n}"
+	return
+}
+
 func NewConstructor(input string) Constructor {
-	// PLACEHOLDER
-	data := regexp.MustCompile("<h4>([^<]+)</h4>\\n<pre>([^<]+)</pre>(<div.+)\n</li>\n</ul>").FindStringSubmatch(input)
+	//fmt.Println(input)
+	str := "<h4>([^<]+)</h4>\n<pre>([^<]+)</pre>"
+	//fmt.Println(str)
+	data := regexp.MustCompile(str).FindStringSubmatch(input)
+	debugPrint(data...)
 	name := data[1]
 	def := data[2]
 	mod := NewCMod(strings.SplitN(def, "&nbsp;", 2)[1])
-	doc := NewDoc(data[3])
+	doc := regexp.MustCompile("(<div[^>]+>.*</div>.*)\n</li>\n</ul>").FindStringSubmatch(input)
+	debugPrint(doc...)
 	types := NewArgList(regexp.MustCompile("\\((.*)\\)").FindStringSubmatch(def)[1])
-	return Constructor{mod, name, types, "", doc}
+	return Constructor{mod, name, types, "", NewDoc(doc[1])}
 }
 
 type cMod int
