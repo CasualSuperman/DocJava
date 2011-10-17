@@ -12,9 +12,9 @@ func TestNewConstructor(t *testing.T) {
 	//	b_expected := ""
 	//	c_expected := ""
 	//	d_expected := ""
-	a_str := NewConstructor(a).String()
-	if a_str != a_expected {
-		t.Errorf("Test failed on input a.\nGot:\n%v\nExpected:\n%v\n", a_str, a_expected)
+	a_result := NewConstructor(a).String()
+	if a_result != a_expected {
+		t.Errorf("Test failed on input a.\nGot:\n%v\nExpected:\n%v\n", a_result, a_expected)
 	}
 	/*
 		if NewConstructor(b).String() != b_expected {
