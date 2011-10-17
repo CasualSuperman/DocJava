@@ -59,12 +59,12 @@ func NewConstructor(input string) Constructor {
 	str := "<h4>([^<]+)</h4>\n<pre>([^<]+)</pre>"
 	//fmt.Println(str)
 	data := regexp.MustCompile(str).FindStringSubmatch(input)
-	debugPrint(data...)
+	//	debugPrint(data...)
 	name := data[1]
 	def := data[2]
 	mod := NewCMod(strings.SplitN(def, "&nbsp;", 2)[1])
 	doc := regexp.MustCompile("(<div[^>]+>.*</div>.*)\n</li>\n</ul>").FindStringSubmatch(input)
-	debugPrint(doc...)
+	//	debugPrint(doc...)
 	types := NewArgList(regexp.MustCompile("\\((.*)\\)").FindStringSubmatch(def)[1])
 	return Constructor{mod, name, types, "", NewDoc(doc[1])}
 }
