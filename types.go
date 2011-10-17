@@ -26,23 +26,17 @@ func (t Type) String() (s string) {
 	return
 }
 
-func NewType(uType string) (t Type) {
+func NewType(usType string) (t Type) {
 	sType := ""
 	// If not a basic type
-	if strings.Contains(uType, "<") {
+	if strings.Contains(usType, "<") {
 		// URL with type enclosed
-		replace := "</?a[^>]*>"
-		remove := regexp.MustCompile(replace)
-		uType = remove.ReplaceAllString(uType, "")
-		uType = strings.Replace(uType, "&gt;", ">", -1)
-		uType = strings.Replace(uType, "&lt;", "<", -1)
-		sType = regexp.MustCompile("^|[^<]+\\.").ReplaceAllString(uType, "")
-		/*	} else {
-			// Builtin type
-			sType := strings.Trim(uType, " ")
-		*/
+		usType = regexp.MustCompile("</?a[^>]*>").ReplaceAllString(usType, "")
+		usType = strings.Replace(usType, "&gt;", ">", -1)
+		usType = strings.Replace(usType, "&lt;", "<", -1)
+		sType = regexp.MustCompile(", |,|^|[^<,]+ ?\\.").ReplaceAllString(usType, "")
 	} else {
-		sType = strings.Replace(uType, " ", "", -1)
+		sType = strings.Trim(usType, " ")
 	}
 	t.typeDeclSpecifier = sType
 	return

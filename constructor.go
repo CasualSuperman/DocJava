@@ -19,21 +19,17 @@ func init() {
 // Page 240 of the Java Specification 3
 // Section 8.8
 type Constructor struct {
-	constructorModifiers  Maskable // Optional
-	constructorDeclarator conDeclarator
+	constructorModifiers Maskable // Optional
+	typeParameters       string   // Optional
+	typeTypes            Type
+	// (
+	formalParameterList []Argument // Optional
+	// )
 	// throws
 	throws string // Optional
 	// {
 	// Body
 	// }
-}
-
-type conDeclarator struct {
-	typeParameters string // Optional
-	typeTypes      Type
-	// (
-	formalParameterList []Argument
-	// )
 }
 
 func NewConstructor(input string) Constructor {
