@@ -55,17 +55,22 @@ func (c Constructor) String() (s string) {
 
 func NewConstructor(input string) Constructor {
 	//fmt.Println(input)
-	str := "<h4>([^<]+)</h4>\n<pre>([^<]+)</pre>"
+	str := "<h4>([^<]+)</h4>\n<pre>([^<]+) ?(throws <a[^>]*>[^<]+</a>)?</pre>"
 	//fmt.Println(str)
 	data := regexp.MustCompile(str).FindStringSubmatch(input)
 	//	debugPrint(data...)
 	name := data[1]
 	def := data[2]
+	throws := ""
 	mod := NewCMod(strings.SplitN(def, "&nbsp;", 2)[0])
 	doc := regexp.MustCompile("(<div[^>]+>.*</div>.*)\n</li>\n</ul>").FindStringSubmatch(input)
+	if len(data) > 3 {
+		// throws clause
+		throws = regexp.MustCompile("</?a[^>]*>").ReplaceAllString(data[3], "")
+	}
 	//	debugPrint(doc...)
 	types := NewArgList(regexp.MustCompile("\\((.*)\\)").FindStringSubmatch(def)[1])
-	return Constructor{mod, name, types, "", NewDoc(doc[1])}
+	return Constructor{mod, name, types, throws, NewDoc(doc[1])}
 }
 
 type cMod int
