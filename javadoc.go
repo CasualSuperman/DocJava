@@ -21,9 +21,22 @@ func NewDoc(s string) (j JavaDoc) {
 	j.description = regexp.MustCompile("^<div class=\"block\">(.*)</div>").FindStringSubmatch(s)[1]
 	s = strings.SplitN(s, "</div>", 2)[1]
 	s = regexp.MustCompile("</?span( class=\"strong\")?>").ReplaceAllString(s, "")
-	sets := regexp.MustCompile("<dt>([^<]+)</dt>\n?<dd>(.+)</dd>").FindAllStringSubmatch(s, -1)
+	sets := [][]string{}
+	temp := strings.Split(s, "</dd>")
+	info := regexp.MustCompile("<dt>([^<]+):</dt>\n?<dd>(.+)</dd>")
+	for i := 0; i < len(temp); i++ {
+		sets = append(sets, info.FindStringSubmatch(temp[i]+"</dd>"))
+	}
+	strip := regexp.MustCompile("</?a[^>]*>")
 	for i := 0; i < len(sets); i++ {
-		debugPrint(sets[i]...)
+		if len(sets[i]) > 0 {
+			sets[i][2] = strip.ReplaceAllString(sets[i][2], "")
+			debugPrint(sets[i]...)
+		} else {
+			sets[i] = sets[len(sets)-1]
+			sets = sets[:len(sets)-1]
+			i--
+		}
 	}
 	return
 }
