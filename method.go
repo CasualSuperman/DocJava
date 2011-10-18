@@ -59,11 +59,8 @@ func NewMethod(s string) (m Method) {
 	mType := NewType(data[2])
 	mName := data[3]
 	mArgs := NewArgList(data[4])
-	mThrow := ""
-	if len(data) > 5 {
-		mThrow = " " + data[5]
-	}
-	mDoc := NewDoc(strings.SplitN(s, "</pre>", 2)[1])
+	mThrow := data[5]
+	mDoc := NewDoc("<div" + strings.SplitN(s, "<div", 2)[1])
 	return Method{mMask, mType, mName, mArgs, mThrow, mDoc}
 }
 
@@ -83,6 +80,9 @@ func (m Method) String() (s string) {
 		s += m.formalParameterList[i].String()
 	}
 	s += ")"
+	if m.throws != "" {
+		s += " "
+	}
 	s += m.throws
 	s += " {"
 	s += "\n\n}"
