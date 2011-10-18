@@ -36,9 +36,8 @@ type Constructor struct {
 }
 
 func (c Constructor) String() (s string) {
-	s += "/**\n * "
-	s += javaDoc(c.doc)
-	s += "\n */\n"
+	s += c.doc.String()
+	s += "\n"
 	s += c.constructorModifiers.String()
 	s += " "
 	s += c.typeParameters

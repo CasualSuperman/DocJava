@@ -15,7 +15,7 @@ import (
 	//	"http"
 	//	"io/ioutil"
 	//	"os"
-	//	"regexp"
+	"regexp"
 	"strconv"
 	"strings"
 	//	"sync"
@@ -94,10 +94,11 @@ func debugPrint(data ...string) {
 	fmt.Println("}")
 }
 
-func javaDoc(s JavaDoc) string {
-	//	s = strings.Replace(s, ">", "&gt;", -1)
-	//	s = strings.Replace(s, "<", "&lt;", -1)
-	return strings.Replace(s.String(), "\n", "\n * ", -1)
+func javaDoc(j JavaDoc) (s string) {
+	s = j.String()
+	s = strings.Replace(s, "\n", "\n * ", -1)
+	s = regexp.MustCompile(" * $").ReplaceAllString(s, " *")
+	return
 }
 
 func main() {

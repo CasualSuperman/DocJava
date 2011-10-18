@@ -43,9 +43,8 @@ type Field struct {
 }
 
 func (f Field) String() (s string) {
-	s += "/**\n * "
-	s += javaDoc(f.javaDoc)
-	s += "\n */\n"
+	s += f.javaDoc.String()
+	s += "\n"
 	s += f.fieldModifiers.String()
 	s += " "
 	s += f.fieldType.String()
