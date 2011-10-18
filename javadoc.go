@@ -17,10 +17,11 @@ type JavaDoc struct {
 	example                                               string
 }
 
-func NewDoc(s string) JavaDoc {
-	desc := regexp.MustCompile("^<div class=\"block\">(.*)</div>").FindStringSubmatch(s)[1]
+func NewDoc(s string) (j JavaDoc) {
+	j.description = regexp.MustCompile("^<div class=\"block\">(.*)</div>").FindStringSubmatch(s)[1]
 	s = strings.SplitN(s, "</div>", 2)[1]
-	return JavaDoc{description: desc}
+	s = regexp.MustCompile("</?span( class=\"strong\")?>").ReplaceAllString(s, "")
+	return
 }
 
 func (j JavaDoc) String() (s string) {
