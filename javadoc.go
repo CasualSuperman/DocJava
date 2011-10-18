@@ -39,7 +39,7 @@ func NewDoc(s string) (j JavaDoc) {
 }
 
 func (j *JavaDoc) AddInfo(info []string) {
-	info[1] = strings.Trim(regexp.MustCompile("\n[ \t]*").ReplaceAllString(info[1], " "), " ")
+	info[1] = strings.Trim(regexp.MustCompile("\n[ \t]*").ReplaceAllString(info[1], "\n"), " ")
 	info[1] = strings.Replace(info[1], "\n", "\n * ", -1)
 	switch info[0] {
 	case "Modeled By":
