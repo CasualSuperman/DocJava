@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 )
@@ -31,14 +32,51 @@ func NewDoc(s string) (j JavaDoc) {
 	for i := 0; i < len(sets); i++ {
 		if len(sets[i]) > 0 {
 			sets[i][2] = strip.ReplaceAllString(sets[i][2], "")
-			debugPrint(sets[i]...)
-		} else {
-			sets[i] = sets[len(sets)-1]
-			sets = sets[:len(sets)-1]
-			i--
+			j.AddInfo(sets[i][1:])
 		}
 	}
 	return
+}
+
+func (j *JavaDoc) AddInfo(info []string) {
+	info[1] = regexp.MustCompile("\n[ \t]*").ReplaceAllString(info[1], " ")
+	switch info[0] {
+	case "Modeled By":
+		j.modeledBy = info[1]
+	case "Initialization Ensures":
+		j.initEnsures = info[1]
+	case "Representation Invariant":
+		j.invariant = info[1]
+	case "Requires":
+		j.requires = append(j.requires, info[1])
+	case "Correspondence":
+		j.correspondence = info[1]
+	case "Version":
+		j.version = info[1]
+	case "Author":
+		j.author = append(j.author, info[1])
+	case "Parameters":
+		info[1] = strings.Replace(strings.Replace(info[1], "<code>", "", 1), "</code> - ", " ", 1)
+		j.param = append(j.param, info[1])
+	case "Precondition":
+		j.precondition = append(j.precondition, info[1])
+	case "Postcondition":
+		j.postcondition = append(j.postcondition, info[1])
+	case "Preserves":
+		j.preserves = append(j.preserves, info[1])
+	case "Returns":
+		j.returns = info[1]
+	case "Throws":
+		info[1] = strings.Replace(strings.Replace(info[1], "<code>", "", 1), "</code> - ", " ", 1)
+		j.throws = append(j.throws, info[1])
+	case "Example":
+		j.example = info[1]
+	case "See Also":
+		// Go doesn't fall through by default, so this actually does nothing.
+	default:
+		fmt.Println("Woah, what's this?")
+		debugPrint(append([]string{""}, info...)...)
+	}
 }
 
 func (j JavaDoc) String() (s string) {
@@ -75,16 +113,18 @@ func (j JavaDoc) String() (s string) {
 			s += "\n@author " + j.author[i]
 		}
 	}
-	if len(j.author) > 0 {
-		s += "\n"
-		for i := 0; i < len(j.author); i++ {
-			s += "\n@author " + j.author[i]
+	/*
+		if len(j.author) > 0 {
+			s += "\n"
+			for i := 0; i < len(j.author); i++ {
+				s += "\n@author " + j.author[i]
+			}
 		}
-	}
+	*/
 	if len(j.param) > 0 {
 		s += "\n"
 		for i := 0; i < len(j.param); i++ {
-			s += "\n@param " + j.author[i]
+			s += "\n@param " + j.param[i]
 		}
 	}
 	if len(j.precondition) > 0 {
@@ -102,7 +142,7 @@ func (j JavaDoc) String() (s string) {
 	if len(j.preserves) > 0 {
 		s += "\n"
 		for i := 0; i < len(j.preserves); i++ {
-			s += "\n@postcondition " + j.preserves[i]
+			s += "\n@preserves " + j.preserves[i]
 		}
 	}
 	if j.returns != "" {
@@ -112,7 +152,7 @@ func (j JavaDoc) String() (s string) {
 	if len(j.throws) > 0 {
 		s += "\n"
 		for i := 0; i < len(j.throws); i++ {
-			s += "\n@postcondition " + j.throws[i]
+			s += "\n@throws " + j.throws[i]
 		}
 	}
 	if j.example != "" {
