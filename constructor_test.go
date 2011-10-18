@@ -8,7 +8,7 @@ func TestNewConstructor(t *testing.T) {
 	//	c := ""
 	//	d := ""
 
-	a_expected := "/**\n * Creates a new, empty BoundedLinkedSet.\n *\n * @param capacity The capacity of this newly created <code>BoundedLinkedSet</code>.\n *\n * @throws IllegalArgumentException if capacity &lt;= 0.\n */\npublic BoundedLinkedSet(int capacity) {\n}"
+	a_expected := "/**\n * Creates a new, empty BoundedLinkedSet.\n *\n * @param capacity The capacity of this newly created <code>BoundedLinkedSet</code>.\n *\n * @throws IllegalArgumentException if capacity &lt;= 0.\n */\npublic BoundedLinkedSet(int capacity) {\n\n}"
 	//	b_expected := ""
 	//	c_expected := ""
 	//	d_expected := ""

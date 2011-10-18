@@ -50,7 +50,7 @@ func (c Constructor) String() (s string) {
 		s += c.formalParameterList[i].String()
 	}
 	s += ") {"
-	s += "\n}"
+	s += "\n\n}"
 	return
 }
 
@@ -62,7 +62,7 @@ func NewConstructor(input string) Constructor {
 	//	debugPrint(data...)
 	name := data[1]
 	def := data[2]
-	mod := NewCMod(strings.SplitN(def, "&nbsp;", 2)[1])
+	mod := NewCMod(strings.SplitN(def, "&nbsp;", 2)[0])
 	doc := regexp.MustCompile("(<div[^>]+>.*</div>.*)\n</li>\n</ul>").FindStringSubmatch(input)
 	//	debugPrint(doc...)
 	types := NewArgList(regexp.MustCompile("\\((.*)\\)").FindStringSubmatch(def)[1])
