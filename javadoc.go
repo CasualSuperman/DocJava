@@ -6,14 +6,26 @@ import (
 )
 
 type JavaDoc struct {
-	description                                           string
-	modeledBy, initEnsures, invariant                     string
-	requires                                              []string
-	correspondence, version                               string
-	author, param, precondition, postcondition, preserves []string
-	returns                                               string
-	throws                                                []string
-	example                                               string
+	description                       string
+	modeledBy, initEnsures, invariant string
+	requires                          []string
+	correspondence, version           string
+	author, param, precondition       []string
+	postcondition, preserves          []string
+	returns                           string
+	throws                            []string
+	example                           string
+}
+
+func NewDoc(s string) (j JavaDoc) {
+	j.description = regexp.MustCompile("^<div class=\"block\">(.*)</div>").FindStringSubmatch(s)[1]
+	s = strings.SplitN(s, "</div>", 2)[1]
+	s = regexp.MustCompile("</?span( class=\"strong\")?>").ReplaceAllString(s, "")
+	sets := regexp.MustCompile("<dt>([^<]+)</dt>\n?<dd>(.+)</dd>").FindAllStringSubmatch(s, -1)
+	for i := 0; i < len(sets); i++ {
+		debugPrint(sets[i]...)
+	}
+	return
 }
 
 func (j JavaDoc) String() (s string) {
@@ -94,12 +106,5 @@ func (j JavaDoc) String() (s string) {
 		s += "\n"
 		s += "\n@example " + j.example
 	}
-	return
-}
-
-func NewDoc(s string) (j JavaDoc) {
-	j.description = regexp.MustCompile("^<div class=\"block\">(.*)</div>").FindStringSubmatch(s)[1]
-	s = strings.SplitN(s, "</div>", 2)[1]
-	s = regexp.MustCompile("</?span( class=\"strong\")?>").ReplaceAllString(s, "")
 	return
 }
