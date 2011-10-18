@@ -55,12 +55,6 @@ func (f Field) String() (s string) {
 	return
 }
 
-func javaDoc(s JavaDoc) string {
-	//	s = strings.Replace(s, ">", "&gt;", -1)
-	//	s = strings.Replace(s, "<", "&lt;", -1)
-	return strings.Replace(s.String(), "\n", "\n * ", -1)
-}
-
 func NewField(text string) Field {
 	// Pull out name and doc, leave mods and type together
 	regString := "<pre>([^&]+)&nbsp;(.+) ([^ ]+)</pre>\n(<div[^>]*>.*</div>.*)\n</li>\n</ul>"
