@@ -73,11 +73,11 @@ func (m Method) String() (s string) {
 	s += " "
 	s += m.methodName
 	s += "("
-	for i := 0; i < len(m.formalParameterList); i++ {
+	for i, param := range m.formalParameterList {
 		if i > 0 {
 			s += ", "
 		}
-		s += m.formalParameterList[i].String()
+		s += param.String()
 	}
 	s += ")"
 	if m.throws != "" {
@@ -93,9 +93,9 @@ type mMod int
 
 func NewMMod(list string) (m *mMod) {
 	m = new(mMod)
-	for i := 0; i < len(me_masks); i++ {
-		if strings.Contains(list, me_masks[i].String()) {
-			m.Set(me_masks[i], true)
+	for _, mask := range me_masks {
+		if strings.Contains(list, mask.String()) {
+			m.Set(mask, true)
 		}
 	}
 	return

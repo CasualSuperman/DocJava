@@ -13,8 +13,8 @@ func NewArgList(s string) []Argument {
 	s = RemoveUrl(s)
 	args := strings.Split(s, " ")
 	result := []Argument{}
-	for i := 0; i < len(args); i++ {
-		result = append(result, parse(args[i]))
+	for _, arg := range args {
+		result = append(result, parse(arg))
 	}
 	return result
 }

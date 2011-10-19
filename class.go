@@ -65,6 +65,22 @@ func NewClass(preamble, nested_class, nested_interface, field, constructor, meth
 	c.identifier = info[2]
 	c.super = NewType(info[3]).String()
 	c.interfaces = RemoveUrl(info[5])
+
+	split := "<a name="
+	//classes := strings.Split(nested_class, split)
+	//interfaces := strings.Split(nested_interface, split)
+	fields := strings.Split(field, split)
+	constructors := strings.Split(constructor, split)
+	methods := strings.Split(method, split)
+	for _, value := range fields {
+		c.fieldDeclarations = append(c.fieldDeclarations, NewField("<a name=" + value))
+	}
+	for _, value := range constructors {
+		c.constructorDeclarations = append(c.constructorDeclarations, NewConstructor("<a name=" + value))
+	}
+	for _, value := range methods {
+		c.methodDeclarations = append(c.methodDeclarations, NewMethod("<a name=" + value))
+	}
 	return
 }
 
@@ -72,9 +88,9 @@ type clMod int
 
 func NewClMod(list string) (c *clMod) {
 	c = new(clMod)
-	for i := 0; i < len(cm_mods); i++ {
-		if strings.Contains(list, cm_mods[i].String()) {
-			c.Set(cm_mods[i], true)
+	for _, mod := range cm_mods {
+		if strings.Contains(list, mod.String()) {
+			c.Set(mod, true)
 		}
 	}
 	return

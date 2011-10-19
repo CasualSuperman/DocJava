@@ -42,11 +42,11 @@ func (c Constructor) String() (s string) {
 	s += " "
 	s += c.typeParameters
 	s += "("
-	for i := 0; i < len(c.formalParameterList); i++ {
+	for i, param := range c.formalParameterList {
 		if i > 0 {
 			s += ", "
 		}
-		s += c.formalParameterList[i].String()
+		s += param.String()
 	}
 	s += ") {"
 	s += "\n\n}"
@@ -77,9 +77,9 @@ type cMod int
 
 func NewCMod(list string) (c *cMod) {
 	c = new(cMod)
-	for i := 0; i < len(cn_masks); i++ {
-		if strings.Contains(list, cn_masks[i].String()) {
-			c.Set(cn_masks[i], true)
+	for _, mask := range cn_masks {
+		if strings.Contains(list, mask.String()) {
+			c.Set(mask, true)
 		}
 	}
 	return

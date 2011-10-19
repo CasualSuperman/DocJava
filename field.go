@@ -75,9 +75,9 @@ type fMod int
 
 func NewFMod(list string) (f *fMod) {
 	f = new(fMod)
-	for i := 0; i < len(fm_masks); i++ {
-		if strings.Contains(list, fm_masks[i].String()) {
-			f.Set(fm_masks[i], true)
+	for _, mask := range fm_masks {
+		if strings.Contains(list, mask.String()) {
+			f.Set(mask, true)
 		}
 	}
 	return

@@ -25,8 +25,8 @@ func NewDoc(s string) (j JavaDoc) {
 	sets := [][]string{}
 	temp := strings.Split(s, "</dd>")
 	info := regexp.MustCompile("<dt>([^<]+):</dt>\n?<dd>(.+)</dd>")
-	for i := 0; i < len(temp); i++ {
-		sets = append(sets, info.FindStringSubmatch(temp[i]+"</dd>"))
+	for _, val := range temp {
+		sets = append(sets, info.FindStringSubmatch(val+"</dd>"))
 	}
 	strip := regexp.MustCompile("</?a[^>]*>")
 	for i := 0; i < len(sets); i++ {
@@ -97,8 +97,8 @@ func (j JavaDoc) String() (s string) {
 	}
 	if len(j.requires) > 0 {
 		s += "\n *"
-		for i := 0; i < len(j.requires); i++ {
-			s += "\n * @requires " + j.requires[i]
+		for _, val := range j.requires {
+			s += "\n * @requires " + val
 		}
 	}
 	if j.correspondence != "" {
@@ -111,40 +111,32 @@ func (j JavaDoc) String() (s string) {
 	}
 	if len(j.author) > 0 {
 		s += "\n *"
-		for i := 0; i < len(j.author); i++ {
-			s += "\n * @author " + j.author[i]
+		for _, val := range j.author {
+			s += "\n * @author " + val
 		}
 	}
-	/*
-		if len(j.author) > 0 {
-			s += "\n"
-			for i := 0; i < len(j.author); i++ {
-				s += "\n@author " + j.author[i]
-			}
-		}
-	*/
 	if len(j.param) > 0 {
 		s += "\n *"
-		for i := 0; i < len(j.param); i++ {
-			s += "\n * @param " + j.param[i]
+		for _, val := range j.param {
+			s += "\n * @param " + val
 		}
 	}
 	if len(j.precondition) > 0 {
 		s += "\n *"
-		for i := 0; i < len(j.precondition); i++ {
-			s += "\n * @precondition " + j.precondition[i]
+		for _, val := range j.precondition {
+			s += "\n * @precondition " + val
 		}
 	}
 	if len(j.postcondition) > 0 {
 		s += "\n *"
-		for i := 0; i < len(j.postcondition); i++ {
-			s += "\n * @postcondition " + j.postcondition[i]
+		for _, val := range j.postcondition {
+			s += "\n * @postcondition " + val
 		}
 	}
 	if len(j.preserves) > 0 {
 		s += "\n *"
-		for i := 0; i < len(j.preserves); i++ {
-			s += "\n * @preserves " + j.preserves[i]
+		for _, val := range j.preserves {
+			s += "\n * @preserves " + val
 		}
 	}
 	if j.returns != "" {
@@ -153,8 +145,8 @@ func (j JavaDoc) String() (s string) {
 	}
 	if len(j.throws) > 0 {
 		s += "\n *"
-		for i := 0; i < len(j.throws); i++ {
-			s += "\n * @throws " + j.throws[i]
+		for _, val := range j.throws {
+			s += "\n * @throws " + val
 		}
 	}
 	if j.example != "" {
