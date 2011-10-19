@@ -5,30 +5,13 @@ import (
 	"strings"
 )
 
-var fm_final, fm_private, fm_protected, fm_public, fm_static, fm_transient,
-	fm_volatile Mask
-
-var fm_masks []Mask
-
-func init() {
-	var i uint = 0
-	fm_final = Mask{1 << i, "final"}
-	i++
-	fm_private = Mask{1 << i, "private"}
-	i++
-	fm_protected = Mask{1 << i, "protected"}
-	i++
-	fm_public = Mask{1 << i, "public"}
-	i++
-	fm_static = Mask{1 << i, "static"}
-	i++
-	fm_transient = Mask{1 << i, "transient"}
-	i++
-	fm_volatile = Mask{1 << i, "volatile"}
-	i++
-	fm_masks = append(fm_masks, fm_final, fm_private, fm_protected, fm_public,
-		fm_static, fm_transient, fm_volatile)
-}
+var (
+	fm_masks []Mask = []Mask{
+		Mask{1 << 3, "static"},
+		Mask{1 << 4, "final"},
+		Mask{1 << 5, "transient"},
+		Mask{1 << 6, "volatile"}}
+)
 
 // Page 196 of the Java Specification 3
 // Section 8.3
@@ -71,10 +54,12 @@ func NewField(text string) Field {
 
 /* Implementing Mask Interface */
 
-type fMod int
+type fMod struct {
+	base_mask
+}
 
-func NewFMod(list string) (f *fMod) {
-	f = new(fMod)
+func NewFMod(list string) (f fMod) {
+	f.base_mask = NewBaseMask(list)
 	for _, mask := range fm_masks {
 		if strings.Contains(list, mask.String()) {
 			f.Set(mask, true)
@@ -83,38 +68,15 @@ func NewFMod(list string) (f *fMod) {
 	return
 }
 
-func (f *fMod) String() (s string) {
-	if f.Has(fm_public) {
-		s += "public"
-	} else if f.Has(fm_private) {
-		s += "private"
-	} else if f.Has(fm_protected) {
-		s += "protected"
-	}
-
-	if f.Has(fm_static) {
-		s += " static"
-	}
-	if f.Has(fm_final) {
-		s += " final"
-	}
-	if f.Has(fm_transient) {
-		s += " transient"
-	}
-	if f.Has(fm_volatile) {
-		s += " volatile"
+func (f fMod) String() (s string) {
+	s = f.base_mask.String()
+	for _, mask := range fm_masks {
+		if f.Has(mask) {
+			if s != "" {
+				s += " "
+			}
+			s += mask.String()
+		}
 	}
 	return
-}
-
-func (f *fMod) Has(mask Mask) bool {
-	return (mask.mask & int(*f)) != 0
-}
-
-func (f *fMod) Set(mask Mask, on bool) {
-	if on && !f.Has(mask) {
-		*f = fMod(int(*f) ^ mask.mask)
-	} else if !on && f.Has(mask) {
-		*f = fMod(int(*f) ^ mask.mask)
-	}
 }

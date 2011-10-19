@@ -5,31 +5,15 @@ import (
 	"strings"
 )
 
-var me_public, me_private, me_protected, me_final, me_static, me_abstract, me_strictfp, me_synchronized, me_native Mask
-var me_masks []Mask
-
-func init() {
-	var i uint = 0
-	me_public = Mask{1 << i, "public"}
-	i++
-	me_protected = Mask{1 << i, "protected"}
-	i++
-	me_private = Mask{1 << i, "private"}
-	i++
-	me_final = Mask{1 << i, "final"}
-	i++
-	me_static = Mask{1 << i, "static"}
-	i++
-	me_abstract = Mask{1 << i, "abstract"}
-	i++
-	me_strictfp = Mask{1 << i, "strictfp"}
-	i++
-	me_synchronized = Mask{1 << i, "synchronized"}
-	i++
-	me_native = Mask{1 << i, "native"}
-	i++
-	me_masks = []Mask{me_public, me_protected, me_private, me_final, me_static, me_abstract, me_strictfp, me_synchronized, me_native}
-}
+var (
+	me_masks []Mask = []Mask{
+		Mask{1 << 3, "final"},
+		Mask{1 << 4, "static"},
+		Mask{1 << 5, "abstract"},
+		Mask{1 << 6, "strictfp"},
+		Mask{1 << 7, "synchronized"},
+		Mask{1 << 8, "native"}}
+)
 
 type Method struct {
 	methodModifiers Maskable // Optional
@@ -89,10 +73,12 @@ func (m Method) String() (s string) {
 	return
 }
 
-type mMod int
+type mMod struct {
+	base_mask
+}
 
-func NewMMod(list string) (m *mMod) {
-	m = new(mMod)
+func NewMMod(list string) (m mMod) {
+	m.base_mask = NewBaseMask(list)
 	for _, mask := range me_masks {
 		if strings.Contains(list, mask.String()) {
 			m.Set(mask, true)
@@ -101,25 +87,15 @@ func NewMMod(list string) (m *mMod) {
 	return
 }
 
-func (m *mMod) String() (s string) {
-	if m.Has(me_public) {
-		s += "public"
-	} else if m.Has(me_private) {
-		s += "private"
-	} else if m.Has(me_protected) {
-		s += "protected"
+func (m mMod) String() (s string) {
+	s = m.base_mask.String()
+	for _, mask := range me_masks {
+		if m.Has(mask) {
+			if s != "" {
+				s += " "
+			}
+			s += mask.String()
+		}
 	}
 	return
-}
-
-func (m *mMod) Has(mask Mask) bool {
-	return (mask.mask & int(*m)) != 0
-}
-
-func (m *mMod) Set(mask Mask, on bool) {
-	if on && !m.Has(mask) {
-		*m = mMod(int(*m) ^ mask.mask)
-	} else if !on && m.Has(mask) {
-		*m = mMod(int(*m) ^ mask.mask)
-	}
 }
