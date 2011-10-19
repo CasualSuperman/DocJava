@@ -18,17 +18,25 @@ func TestNewField(t *testing.T) {
 	d_result := NewField(d).String()
 	if a_result != a_expected {
 		t.Errorf("Test failed on input a.\nGot:\n%v\nExpected:\n%v\n", a_result, a_expected)
+	} else {
+		t.Log(a_result)
 	}
 
 	if b_result != b_expected {
 		t.Errorf("Test failed on input b.\nGot:\n%v\nExpected:\n%v\n", b_result, b_expected)
+	} else {
+		t.Log(b_result)
 	}
 
 	if c_result != c_expected {
 		t.Errorf("Test failed on input c.\nGot:\n%v\nExpected:\n%v\n", c_result, c_expected)
+	} else {
+		t.Log(c_result)
 	}
 
 	if d_result != d_expected {
 		t.Errorf("Test failed on input d.\nGot:\n%v\nExpected:\n%v\n", d_result, d_expected)
+	} else {
+		t.Log(d_result)
 	}
 }

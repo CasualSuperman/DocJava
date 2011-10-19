@@ -12,6 +12,8 @@ func TestNewMethod(t *testing.T) {
 
 	if a_result != a_expected {
 		t.Errorf("Test failed on input a.\nGot:\n%v\nExpected:\n%v\n", a_result, a_expected)
+	} else {
+		t.Log(a_result)
 	}
 	/*
 		if b_result != b_expected {
