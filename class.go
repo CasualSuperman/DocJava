@@ -79,13 +79,13 @@ func NewClass(preamble, nested_class, nested_interface, field, constructor, meth
 	constructors := strings.Split(constructor, split)[1:]
 	methods := strings.Split(method, split)[1:]
 	for _, value := range fields {
-		c.fieldDeclarations = append(c.fieldDeclarations, NewField("<a name=" + value))
+		c.fieldDeclarations = append(c.fieldDeclarations, NewField("<a name="+value))
 	}
 	for _, value := range constructors {
-		c.constructorDeclarations = append(c.constructorDeclarations, NewConstructor("<a name=" + value))
+		c.constructorDeclarations = append(c.constructorDeclarations, NewConstructor("<a name="+value))
 	}
 	for _, value := range methods {
-		c.methodDeclarations = append(c.methodDeclarations, NewMethod("<a name=" + value))
+		c.methodDeclarations = append(c.methodDeclarations, NewMethod("<a name="+value))
 	}
 	return
 }
