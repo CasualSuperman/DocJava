@@ -31,6 +31,10 @@ var semester *string = flag.String("semester", "spring11", "The semester")
 var course *string = flag.String("course", "cs151", "The course")
 var assignment *int = flag.Int("assignmentID", -1, "Assignment number")
 
+func init() {
+	UrlReg = regexp.MustCompile("</?a[^>]*>")
+}
+
 /*
 func main() {
 	flag.Parse()
@@ -112,4 +116,10 @@ func twoDigit(num int) string {
 		result = twoDigit(num % 100)
 	}
 	return result
+}
+
+var UrlReg *regexp.Regexp
+
+func RemoveUrl(s string) string {
+	return UrlReg.ReplaceAllString(s, "")
 }

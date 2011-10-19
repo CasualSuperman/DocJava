@@ -66,7 +66,7 @@ func NewConstructor(input string) Constructor {
 	doc := regexp.MustCompile("(<div[^>]+>.*</div>.*)\n</li>\n</ul>").FindStringSubmatch(input)
 	if len(data) > 3 {
 		// throws clause
-		throws = regexp.MustCompile("</?a[^>]*>").ReplaceAllString(data[3], "")
+		throws = RemoveUrl(data[3])
 	}
 	//	debugPrint(doc...)
 	types := NewArgList(regexp.MustCompile("\\((.*)\\)").FindStringSubmatch(def)[1])
@@ -104,6 +104,6 @@ func (c *cMod) Set(mask Mask, on bool) {
 	if on && !c.Has(mask) {
 		*c = cMod(int(*c) ^ mask.mask)
 	} else if !on && c.Has(mask) {
-		*c = cMod(int(*c) | mask.mask)
+		*c = cMod(int(*c) ^ mask.mask)
 	}
 }

@@ -31,7 +31,7 @@ func NewType(usType string) (t Type) {
 	// If not a basic type
 	if strings.Contains(usType, "<") {
 		// URL with type enclosed
-		usType = regexp.MustCompile("</?a[^>]*>").ReplaceAllString(usType, "")
+		usType = RemoveUrl(usType)
 		usType = strings.Replace(usType, "&gt;", ">", -1)
 		usType = strings.Replace(usType, "&lt;", "<", -1)
 		sType = regexp.MustCompile(", |,|^|[^<,]+ ?\\.").ReplaceAllString(usType, "")

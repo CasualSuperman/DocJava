@@ -115,6 +115,6 @@ func (f *fMod) Set(mask Mask, on bool) {
 	if on && !f.Has(mask) {
 		*f = fMod(int(*f) ^ mask.mask)
 	} else if !on && f.Has(mask) {
-		*f = fMod(int(*f) | mask.mask)
+		*f = fMod(int(*f) ^ mask.mask)
 	}
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"regexp"
 	"strings"
 )
 
@@ -11,7 +10,7 @@ type Argument struct {
 }
 
 func NewArgList(s string) []Argument {
-	s = regexp.MustCompile("</?a[^>]*>").ReplaceAllString(s, "")
+	s = RemoveUrl(s)
 	args := strings.Split(s, " ")
 	result := []Argument{}
 	for i := 0; i < len(args); i++ {
