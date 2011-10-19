@@ -1,14 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 )
 
 var (
-	mPublic Mask = Mask{1 << 0, "public"}
-	mPrivate Mask = Mask{1 << 1, "private"}
-	mProtected Mask = Mask{1 << 2, "protected"}
+	gMasks []Mask = []Mask{
+		Mask{1 << 0, "public"},
+		Mask{1 << 1, "private"},
+		Mask{1 << 2, "protected"}}
 )
 
 type Mask struct {
@@ -37,7 +37,7 @@ type base_mask struct {
 
 func NewBaseMask(list string) (b base_mask) {
 	b.int = new(int)
-	for _, mask := range []Mask{mPrivate, mProtected, mPublic} {
+	for _, mask := range gMasks {
 		if strings.Contains(list, mask.String()) {
 			b.Set(mask, true)
 		}
@@ -56,14 +56,10 @@ func (b base_mask) Set(m Mask, on bool) {
 }
 
 func (b base_mask) String() (s string) {
-	if b.Has(mPrivate) {
-		s = "private"
-	} else if b.Has(mProtected) {
-		s = "protected"
-	} else if b.Has(mPublic) {
-		s = "public"
-	} else {
-		fmt.Println("Warning: implicit use of public.")
+	for _, mask := range gMasks {
+		if b.Has(mask) {
+			s = mask.String()
+		}
 	}
 	return
 }

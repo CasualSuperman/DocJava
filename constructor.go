@@ -5,20 +5,6 @@ import (
 	"strings"
 )
 
-var cn_public, cn_private, cn_protected Mask
-var cn_masks []Mask
-
-func init() {
-	var i uint = 0
-	cn_public = Mask{1 << i, "public"}
-	i++
-	cn_private = Mask{1 << i, "private"}
-	i++
-	cn_protected = Mask{1 << i, "protected"}
-	i++
-	cn_masks = append(cn_masks, cn_public, cn_private, cn_protected)
-}
-
 // Page 240 of the Java Specification 3
 // Section 8.8
 type Constructor struct {
@@ -62,7 +48,7 @@ func NewConstructor(input string) Constructor {
 	name := data[1]
 	def := data[2]
 	throws := ""
-	mod := NewCMod(strings.SplitN(def, "&nbsp;", 2)[0])
+	mask := NewCMask(strings.SplitN(def, "&nbsp;", 2)[0])
 	doc := regexp.MustCompile("(<div[^>]+>.*</div>.*)\n</li>\n</ul>").FindStringSubmatch(input)
 	if len(data) > 3 {
 		// throws clause
@@ -70,40 +56,14 @@ func NewConstructor(input string) Constructor {
 	}
 	//	debugPrint(doc...)
 	types := NewArgList(regexp.MustCompile("\\((.*)\\)").FindStringSubmatch(def)[1])
-	return Constructor{mod, name, types, throws, NewDoc(doc[1])}
+	return Constructor{mask, name, types, throws, NewDoc(doc[1])}
 }
 
-type cMod int
+type cMask struct {
+	base_mask
+}
 
-func NewCMod(list string) (c *cMod) {
-	c = new(cMod)
-	for _, mask := range cn_masks {
-		if strings.Contains(list, mask.String()) {
-			c.Set(mask, true)
-		}
-	}
+func NewCMask(list string) (c cMask) {
+	c.base_mask = NewBaseMask(list)
 	return
-}
-
-func (c *cMod) String() (s string) {
-	if c.Has(cn_public) {
-		s += "public"
-	} else if c.Has(cn_protected) {
-		s += "protected"
-	} else if c.Has(cn_private) {
-		s += "private"
-	}
-	return
-}
-
-func (c *cMod) Has(mask Mask) bool {
-	return (mask.mask & int(*c)) != 0
-}
-
-func (c *cMod) Set(mask Mask, on bool) {
-	if on && !c.Has(mask) {
-		*c = cMod(int(*c) ^ mask.mask)
-	} else if !on && c.Has(mask) {
-		*c = cMod(int(*c) ^ mask.mask)
-	}
 }

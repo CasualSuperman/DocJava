@@ -6,10 +6,11 @@ import (
 )
 
 var (
-	fm_masks []Mask = []Mask{ Mask{1 << 3, "static"},
-							  Mask{1 << 4, "final"},
-							  Mask{1 << 5, "transient"},
-							  Mask{1 << 6, "volatile"}}
+	fm_masks []Mask = []Mask{
+		Mask{1 << 3, "static"},
+		Mask{1 << 4, "final"},
+		Mask{1 << 5, "transient"},
+		Mask{1 << 6, "volatile"}}
 )
 
 // Page 196 of the Java Specification 3

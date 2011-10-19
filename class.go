@@ -5,29 +5,13 @@ import (
 	"strings"
 )
 
-var cm_abstract, cm_final, cm_private, cm_protected, cm_public, cm_static,
-	cm_strictfp Mask
-
-var cm_mods []Mask
-
-func init() {
-	var i uint = 0
-	cm_abstract = Mask{1 << i, "abstract"}
-	i++
-	cm_final = Mask{1 << i, "final"}
-	i++
-	cm_private = Mask{1 << i, "private"}
-	i++
-	cm_protected = Mask{1 << i, "protected"}
-	i++
-	cm_public = Mask{1 << i, "public"}
-	i++
-	cm_static = Mask{1 << i, "static"}
-	i++
-	cm_strictfp = Mask{1 << i, "strictfp"}
-	i++
-	cm_mods = append(cm_mods, cm_abstract, cm_final, cm_private, cm_protected, cm_public, cm_static, cm_strictfp)
-}
+var (
+	cm_mods []Mask = []Mask{
+		Mask{1 << 3, "abstract"},
+		Mask{1 << 4, "final"},
+		Mask{1 << 5, "static"},
+		Mask{1 << 6, "strictfp"}}
+)
 
 // Page 175 of the Java Specification 3
 // Section 8.1
@@ -136,49 +120,29 @@ func (c Class) String() (s string) {
 	return
 }
 
-type clMod int
+type clMod struct {
+	base_mask
+}
 
-func NewClMod(list string) (c *clMod) {
-	c = new(clMod)
-	for _, mod := range cm_mods {
-		if strings.Contains(list, mod.String()) {
-			c.Set(mod, true)
+func NewClMod(list string) (c clMod) {
+	c.base_mask = NewBaseMask(list)
+	for _, mask := range cm_mods {
+		if strings.Contains(list, mask.String()) {
+			c.Set(mask, true)
 		}
 	}
 	return
 }
 
-func (c *clMod) String() (s string) {
-	if c.Has(cm_public) {
-		s = "public"
-	} else if c.Has(cm_private) {
-		s = "private"
-	} else if c.Has(cm_protected) {
-		s = "protected"
-	}
-	if c.Has(cm_final) {
-		s += " final"
-	}
-	if c.Has(cm_abstract) {
-		s += " abstract"
-	}
-	if c.Has(cm_static) {
-		s += " static"
-	}
-	if c.Has(cm_strictfp) {
-		s += " strictfp"
+func (c clMod) String() (s string) {
+	s = c.base_mask.String()
+	for _, mask := range cm_mods {
+		if c.Has(mask) {
+			if s != "" {
+				s += " "
+			}
+			s += mask.String()
+		}
 	}
 	return
-}
-
-func (c *clMod) Has(mask Mask) bool {
-	return (mask.mask & int(*c)) != 0
-}
-
-func (c *clMod) Set(mask Mask, on bool) {
-	if on && !c.Has(mask) {
-		*c = clMod(int(*c) ^ mask.mask)
-	} else if !on && c.Has(mask) {
-		*c = clMod(int(*c) ^ mask.mask)
-	}
 }
