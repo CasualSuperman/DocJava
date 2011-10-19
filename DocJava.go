@@ -123,3 +123,7 @@ var UrlReg *regexp.Regexp
 func RemoveUrl(s string) string {
 	return UrlReg.ReplaceAllString(s, "")
 }
+
+func tab(s string, i int) string {
+	return strings.Replace(s, "\n", "\n\t", -1)
+}

@@ -42,7 +42,7 @@ type Class struct {
 	// extends
 	super string // Optional
 	// implements
-	interfaces string // Optional
+	interfaces []string // Optional
 	// {
 	fieldDeclarations       []Field
 	constructorDeclarations []Constructor
@@ -50,6 +50,7 @@ type Class struct {
 	classDeclarations       []Class
 	interfaceDeclarations   []Interface
 	// }
+	doc JavaDoc
 }
 
 func NewClass(preamble, nested_class, nested_interface, field, constructor, method string) (c Class) {
@@ -60,18 +61,23 @@ func NewClass(preamble, nested_class, nested_interface, field, constructor, meth
 	 * 5) Implements
 	 */
 	preamble_reg := regexp.MustCompile("<pre>(.*) class <span[^>]+>([^<]+)</span>\nextends ([^\\n]+)\n?(implements (.+))?</pre>")
+	tempDoc := strings.Split(strings.Split(preamble, "</pre>\n")[1], "</div>\n<div class=\"summary\">")[0]
+	c.doc = NewDoc(tempDoc)
 	info := preamble_reg.FindStringSubmatch(preamble)
 	c.classModifiers = NewClMod(info[1])
-	c.identifier = info[2]
+	c.identifier = strings.Replace(strings.Replace(info[2], "&gt;", ">", -1), "&lt;", "<", -1)
 	c.super = NewType(info[3]).String()
-	c.interfaces = RemoveUrl(info[5])
-
+	if len(info[4]) > 0 {
+		c.interfaces = strings.Split(RemoveUrl(info[5]), ",")
+	} else {
+		c.interfaces = []string{}
+	}
 	split := "<a name="
 	//classes := strings.Split(nested_class, split)
 	//interfaces := strings.Split(nested_interface, split)
-	fields := strings.Split(field, split)
-	constructors := strings.Split(constructor, split)
-	methods := strings.Split(method, split)
+	fields := strings.Split(field, split)[1:]
+	constructors := strings.Split(constructor, split)[1:]
+	methods := strings.Split(method, split)[1:]
 	for _, value := range fields {
 		c.fieldDeclarations = append(c.fieldDeclarations, NewField("<a name=" + value))
 	}
@@ -81,6 +87,52 @@ func NewClass(preamble, nested_class, nested_interface, field, constructor, meth
 	for _, value := range methods {
 		c.methodDeclarations = append(c.methodDeclarations, NewMethod("<a name=" + value))
 	}
+	return
+}
+
+func (c Class) String() (s string) {
+	s += c.doc.String()
+	s += "\n"
+	s += c.classModifiers.String()
+	s += " class "
+	s += c.identifier
+	if len(c.typeParameters) > 0 {
+		s += "<"
+		for i, val := range c.typeParameters {
+			if i > 0 {
+				s += ", "
+			}
+			s += val.String()
+		}
+	}
+	if c.super != "Object" {
+		s += " extends "
+		s += c.super
+	}
+	if len(c.interfaces) > 0 {
+		s += " implements "
+		for i, val := range c.interfaces {
+			if i > 0 {
+				s += ", "
+			}
+			s += val
+		}
+	}
+	s += " {"
+	s += "\n"
+	for _, field := range c.fieldDeclarations {
+		s += tab(field.String(), 1)
+		s += "\n"
+	}
+	for _, constructor := range c.constructorDeclarations {
+		s += tab(constructor.String(), 1)
+		s += "\n"
+	}
+	for _, method := range c.methodDeclarations {
+		s += tab(method.String(), 1)
+		s += "\n"
+	}
+	s += "}"
 	return
 }
 

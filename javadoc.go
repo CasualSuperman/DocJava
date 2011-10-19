@@ -24,7 +24,8 @@ func NewDoc(s string) (j JavaDoc) {
 	s = regexp.MustCompile("</?span( class=\"strong\")?>").ReplaceAllString(s, "")
 	sets := [][]string{}
 	temp := strings.Split(s, "</dd>")
-	info := regexp.MustCompile("<dt>([^<]+):</dt>\n?<dd>(.+)</dd>")
+	info := regexp.MustCompile("<dt>([^<]+):</dt>\n? *<dd>(.+)</dd>")
+
 	for _, val := range temp {
 		sets = append(sets, info.FindStringSubmatch(val+"</dd>"))
 	}
@@ -39,7 +40,7 @@ func NewDoc(s string) (j JavaDoc) {
 }
 
 func (j *JavaDoc) AddInfo(info []string) {
-	info[1] = strings.Trim(regexp.MustCompile("\n[ \t]*").ReplaceAllString(info[1], "\n"), " ")
+	info[1] = strings.Trim(regexp.MustCompile("\n\t*").ReplaceAllString(info[1], "\n"), " ")
 	info[1] = strings.Replace(info[1], "\n", "\n * ", -1)
 	switch info[0] {
 	case "Modeled By":
