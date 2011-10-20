@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	 classMasker FullMask = BitMasker([]Mask{
+	classMasker FullMask = BitMasker([]Mask{
 		Mask{1 << 3, "abstract"},
 		Mask{1 << 4, "final"},
 		Mask{1 << 5, "static"},

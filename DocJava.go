@@ -38,12 +38,12 @@ func init() {
 func SplitClass(html string) []string {
 	result := []string{}
 	temp := regexp.MustCompile("<li><a href=[^>]+>([^<]+)</a>").FindAllStringSubmatch(strings.SplitN(
-				strings.SplitN(
-					html,
-					"<ul class=\"subNavList\">\n<li>Detail:&nbsp;</li>\n",
-					2)[1],
-				"</ul>",
-				2)[0], -1)
+		strings.SplitN(
+			html,
+			"<ul class=\"subNavList\">\n<li>Detail:&nbsp;</li>\n",
+			2)[1],
+		"</ul>",
+		2)[0], -1)
 	sections := []string{}
 	for _, val := range temp {
 		sections = append(sections, val[1])
