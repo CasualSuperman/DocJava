@@ -13,7 +13,7 @@ import (
 	"flag"
 	"fmt"
 	//	"http"
-	//	"io/ioutil"
+	"io/ioutil"
 	//	"os"
 	"regexp"
 	"strconv"
@@ -35,65 +35,26 @@ func init() {
 	UrlReg = regexp.MustCompile("</?a[^>]*>")
 }
 
-/*
-func main() {
-	flag.Parse()
-	var url string
-	if *user != "" && *pass != "" {
-		url = "http://" + *user + ":" + *pass + "@"
-	} else if u, p := (*user != ""), (*pass != ""); !(u && p) && !(!u && !p) {
-		fmt.Println(usage)
-		fmt.Println("You must either specify both a username and a password or neither.")
-		os.Exit(1)
+func SplitClass(html string) []string {
+	result := []string{}
+	temp := regexp.MustCompile("<li><a href=[^>]+>([^<]+)</a>").FindAllStringSubmatch(strings.SplitN(
+				strings.SplitN(
+					html,
+					"<ul class=\"subNavList\">\n<li>Detail:&nbsp;</li>\n",
+					2)[1],
+				"</ul>",
+				2)[0], -1)
+	sections := []string{}
+	for _, val := range temp {
+		sections = append(sections, val[1])
 	}
-	url += "polaris.cs.wcu.edu/" +
-		"~adalton/teaching/" + *semester + "/" + *course
-	if *labnum > 0 {
-		url += "/labs/lab" + twoDigit(*labnum)
-	} else if *assignment > 0 {
-		url += "/assignments/assignment" + twoDigit(*assignment)
-	} else {
-		fmt.Println(usage)
-		fmt.Println("You must specify either an assignment or a lab.")
-		os.Exit(1)
-	}
-	url += "docs/"
-	classUrl := url + "allclasses-noframe.html"
-	classHTTP, err := http.Get(classUrl)
-	if err != nil {
-		fmt.Println("The requested assignment could not be retreived.")
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	classHTML, _ := ioutil.ReadAll(classHTTP.Body)
-	reg, _ := regexp.Compile("A HREF=\"([^\"+)\" [^>]+>([^<+])</A>")
-	classTemp := reg.FindAllStringSubmatch(string(classHTML), -1)
-	classPairs := make([][2]string, len(classTemp))
-	for i, class := range classTemp {
-		for j, val := range class {
-			if j != 0 {
-				classPairs[i][j-1] = val
-			}
-		}
-	}
-	os.Mkdir("src", 0664)
-	os.Chdir("src")
-	//	classes := make([]*Class, len(classPairs))
-	done := new(sync.WaitGroup)
-	for i, val := range classPairs {
-		done.Add(1)
-		if i == 0 || len(val) == 0 {
-		}
-		//		classes[i] = new(Class).Init(url+val[0], val[1], done)
-	}
-	done.Wait()
+	return result
 }
-*/
 
 func debugPrint(data ...string) {
 	fmt.Println("{")
-	for i := 1; i < len(data); i++ {
-		fmt.Println("\t", data[i])
+	for _, info := range data {
+		fmt.Println("\t", info)
 	}
 	fmt.Println("}")
 }
@@ -106,6 +67,8 @@ func javaDoc(j JavaDoc) (s string) {
 }
 
 func main() {
+	data, _ := ioutil.ReadFile("data.html")
+	SplitClass(string(data))
 }
 
 func twoDigit(num int) string {
