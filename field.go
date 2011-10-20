@@ -6,11 +6,11 @@ import (
 )
 
 var (
-	fm_masks []Mask = []Mask{
+	fieldMasker FullMask = BitMasker([]Mask{
 		Mask{1 << 3, "static"},
 		Mask{1 << 4, "final"},
 		Mask{1 << 5, "transient"},
-		Mask{1 << 6, "volatile"}}
+		Mask{1 << 6, "volatile"}})
 )
 
 // Page 196 of the Java Specification 3
@@ -48,35 +48,6 @@ func NewField(text string) Field {
 	sType := NewType(uType)
 	name := strings.Replace(results[3], " ", "", -1)
 	docs := NewDoc(results[4])
-	mod := NewFMod(mods)
+	mod := fieldMasker.Apply(mods)
 	return Field{mod, sType, name, docs}
-}
-
-/* Implementing Mask Interface */
-
-type fMod struct {
-	base_mask
-}
-
-func NewFMod(list string) (f fMod) {
-	f.base_mask = NewBaseMask(list)
-	for _, mask := range fm_masks {
-		if strings.Contains(list, mask.String()) {
-			f.Set(mask, true)
-		}
-	}
-	return
-}
-
-func (f fMod) String() (s string) {
-	s = f.base_mask.String()
-	for _, mask := range fm_masks {
-		if f.Has(mask) {
-			if s != "" {
-				s += " "
-			}
-			s += mask.String()
-		}
-	}
-	return
 }
