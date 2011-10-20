@@ -37,12 +37,12 @@ type base_mask struct {
 
 type FullMask struct {
 	base_mask
-	extra_masks []Mask
+	extra_masks *[]Mask
 }
 
 func (f FullMask) String() (s string) {
 	s = f.base_mask.String()
-	for _, mask := range f.extra_masks {
+	for _, mask := range *f.extra_masks {
 		if f.Has(mask) {
 			if s != "" {
 				s += " "
@@ -55,14 +55,15 @@ func (f FullMask) String() (s string) {
 
 func BitMasker(extras []Mask) (f FullMask) {
 	f.base_mask = NewBaseMask("")
-	f.extra_masks = append([]Mask{}, extras...)
+	temp := append([]Mask{}, extras...)
+	f.extra_masks = &temp
 	return
 }
 
 func (f FullMask) Apply(list string) (r FullMask) {
 	r.base_mask = NewBaseMask(list)
 	r.extra_masks = f.extra_masks
-	for _, mask := range f.extra_masks {
+	for _, mask := range *f.extra_masks {
 		if strings.Contains(list, mask.String()) {
 			r.Set(mask, true)
 		}
