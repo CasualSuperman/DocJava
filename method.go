@@ -6,13 +6,13 @@ import (
 )
 
 var (
-	me_masks []Mask = []Mask{
+	methodMasker FullMask = BitMasker([]Mask{
 		Mask{1 << 3, "final"},
 		Mask{1 << 4, "static"},
 		Mask{1 << 5, "abstract"},
 		Mask{1 << 6, "strictfp"},
 		Mask{1 << 7, "synchronized"},
-		Mask{1 << 8, "native"}}
+		Mask{1 << 8, "native"}})
 )
 
 type Method struct {
@@ -39,7 +39,7 @@ func NewMethod(s string) (m Method) {
 	 */
 	str := "<pre>(.+)&nbsp;(.+)&nbsp;(.+)\\((.*)\\)[^<]*(throws <a[^>]*>.+</a>)?</pre>"
 	data := regexp.MustCompile(str).FindStringSubmatch(s)
-	mMask := NewMMod(data[1])
+	mMask := methodMasker.Apply(data[1])
 	mType := NewType(data[2])
 	mName := data[3]
 	mArgs := NewArgList(data[4])
@@ -70,32 +70,5 @@ func (m Method) String() (s string) {
 	s += m.throws
 	s += " {"
 	s += "\n\n}"
-	return
-}
-
-type mMod struct {
-	base_mask
-}
-
-func NewMMod(list string) (m mMod) {
-	m.base_mask = NewBaseMask(list)
-	for _, mask := range me_masks {
-		if strings.Contains(list, mask.String()) {
-			m.Set(mask, true)
-		}
-	}
-	return
-}
-
-func (m mMod) String() (s string) {
-	s = m.base_mask.String()
-	for _, mask := range me_masks {
-		if m.Has(mask) {
-			if s != "" {
-				s += " "
-			}
-			s += mask.String()
-		}
-	}
 	return
 }

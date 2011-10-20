@@ -6,11 +6,11 @@ import (
 )
 
 var (
-	cm_mods []Mask = []Mask{
+	 classMasker FullMask = BitMasker([]Mask{
 		Mask{1 << 3, "abstract"},
 		Mask{1 << 4, "final"},
 		Mask{1 << 5, "static"},
-		Mask{1 << 6, "strictfp"}}
+		Mask{1 << 6, "strictfp"}})
 )
 
 // Page 175 of the Java Specification 3
@@ -48,7 +48,7 @@ func NewClass(preamble, nested_class, nested_interface, field, constructor, meth
 	tempDoc := strings.Split(strings.Split(preamble, "</pre>\n")[1], "</div>\n<div class=\"summary\">")[0]
 	c.doc = NewDoc(tempDoc)
 	info := preamble_reg.FindStringSubmatch(preamble)
-	c.classModifiers = NewClMod(info[1])
+	c.classModifiers = classMasker.Apply(info[1])
 	c.identifier = strings.Replace(strings.Replace(info[2], "&gt;", ">", -1), "&lt;", "<", -1)
 	c.super = NewType(info[3]).String()
 	if len(info[4]) > 0 {
@@ -117,32 +117,5 @@ func (c Class) String() (s string) {
 		s += "\n"
 	}
 	s += "}"
-	return
-}
-
-type clMod struct {
-	base_mask
-}
-
-func NewClMod(list string) (c clMod) {
-	c.base_mask = NewBaseMask(list)
-	for _, mask := range cm_mods {
-		if strings.Contains(list, mask.String()) {
-			c.Set(mask, true)
-		}
-	}
-	return
-}
-
-func (c clMod) String() (s string) {
-	s = c.base_mask.String()
-	for _, mask := range cm_mods {
-		if c.Has(mask) {
-			if s != "" {
-				s += " "
-			}
-			s += mask.String()
-		}
-	}
 	return
 }

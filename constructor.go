@@ -5,6 +5,10 @@ import (
 	"strings"
 )
 
+var (
+	constructorMasker FullMask = BitMasker([]Mask{})
+)
+
 // Page 240 of the Java Specification 3
 // Section 8.8
 type Constructor struct {
@@ -48,7 +52,7 @@ func NewConstructor(input string) Constructor {
 	name := data[1]
 	def := data[2]
 	throws := ""
-	mask := NewCMask(strings.SplitN(def, "&nbsp;", 2)[0])
+	mask := constructorMasker.Apply(strings.SplitN(def, "&nbsp;", 2)[0])
 	doc := regexp.MustCompile("(<div[^>]+>.*</div>.*)\n</li>\n</ul>").FindStringSubmatch(input)
 	if len(data) > 3 {
 		// throws clause
@@ -57,13 +61,4 @@ func NewConstructor(input string) Constructor {
 	//	debugPrint(doc...)
 	types := NewArgList(regexp.MustCompile("\\((.*)\\)").FindStringSubmatch(def)[1])
 	return Constructor{mask, name, types, throws, NewDoc(doc[1])}
-}
-
-type cMask struct {
-	base_mask
-}
-
-func NewCMask(list string) (c cMask) {
-	c.base_mask = NewBaseMask(list)
-	return
 }
