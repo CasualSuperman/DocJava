@@ -67,7 +67,7 @@ func javaDoc(j JavaDoc) (s string) {
 }
 
 func main() {
-	data, _ := ioutil.ReadFile("data.html")
+	data, _ := ioutil.ReadFile("_test_data.html")
 	SplitClass(string(data))
 }
 
