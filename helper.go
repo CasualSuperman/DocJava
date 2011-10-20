@@ -27,7 +27,7 @@ func javaDoc(j JavaDoc) (s string) {
 }
 
 // This is used for testing only.
-// No calls to to should exist in a final product.
+// No calls to it should exist in a final product.
 func debugPrint(data ...string) {
 	fmt.Println("{")
 	for _, info := range data {
