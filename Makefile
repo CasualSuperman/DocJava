@@ -11,6 +11,7 @@ GOFILES=\
 	mask.go\
 	method.go\
 	javadoc.go\
-	interface.go
+	interface.go\
+	helper.go
 
 include $(GOROOT)/src/Make.cmd

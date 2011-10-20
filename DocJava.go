@@ -4,35 +4,20 @@
 package main
 /* 
    Author: Bobby Wertman
-   Version: 1.0.0
-   Date: March 20, 2011
+   Version: 0.0.0
+   Date: October 20, 2011
    This application and its source are provided 'as-is' and are available under
    the MIT License.
 */
 import (
-	"flag"
-	"fmt"
-	//	"http"
 	"io/ioutil"
-	//	"os"
 	"regexp"
-	"strconv"
 	"strings"
-	//	"sync"
 )
 
-var usage = "DocJava [-user USERNAME -pass PASSWORD] (-labID || -assignmentID) ID -semester SEMESTER -course COURSE"
-
-var user *string = flag.String("user", "", "HTTP username required for the page.")
-var pass *string = flag.String("pass", "", "HTTP password required for the page.")
-var url *string = flag.String("url", "", "Address to the JavaDoc root.")
-var labnum *int = flag.Int("labID", -1, "Lab number.")
-var semester *string = flag.String("semester", "spring11", "The semester")
-var course *string = flag.String("course", "cs151", "The course")
-var assignment *int = flag.Int("assignmentID", -1, "Assignment number")
-
-func init() {
-	UrlReg = regexp.MustCompile("</?a[^>]*>")
+func main() {
+	data, _ := ioutil.ReadFile("_test_data.html")
+	SplitClass(string(data))
 }
 
 func SplitClass(html string) []string {
@@ -49,44 +34,4 @@ func SplitClass(html string) []string {
 		sections = append(sections, val[1])
 	}
 	return result
-}
-
-func debugPrint(data ...string) {
-	fmt.Println("{")
-	for _, info := range data {
-		fmt.Println("\t", info)
-	}
-	fmt.Println("}")
-}
-
-func javaDoc(j JavaDoc) (s string) {
-	s = j.String()
-	s = strings.Replace(s, "\n", "\n * ", -1)
-	s = regexp.MustCompile(" * $").ReplaceAllString(s, " *")
-	return
-}
-
-func main() {
-	data, _ := ioutil.ReadFile("_test_data.html")
-	SplitClass(string(data))
-}
-
-func twoDigit(num int) string {
-	result := ""
-	if num < 10 {
-		result = "0" + strconv.Itoa(num)
-	} else if num >= 100 {
-		result = twoDigit(num % 100)
-	}
-	return result
-}
-
-var UrlReg *regexp.Regexp
-
-func RemoveUrl(s string) string {
-	return UrlReg.ReplaceAllString(s, "")
-}
-
-func tab(s string, i int) string {
-	return strings.Replace(s, "\n", "\n\t", -1)
 }
