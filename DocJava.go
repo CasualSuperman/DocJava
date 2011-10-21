@@ -17,21 +17,16 @@ import (
 
 func main() {
 	data, _ := ioutil.ReadFile("_test_data.html")
-	SplitClass(string(data))
+	debugPrint(SplitClass(string(data))...)
 }
 
 func SplitClass(html string) []string {
-	result := []string{}
-	temp := regexp.MustCompile("<li><a href=[^>]+>([^<]+)</a>").FindAllStringSubmatch(strings.SplitN(
-		strings.SplitN(
-			html,
-			"<ul class=\"subNavList\">\n<li>Detail:&nbsp;</li>\n",
-			2)[1],
-		"</ul>",
-		2)[0], -1)
+	menu := strings.SplitN(html, "<ul class=\"subNavList\">\n<li>Detail:&nbsp;</li>\n", 2)[1]
+	list := strings.SplitN(menu, "</ul>", 2)[0]
+	temp := regexp.MustCompile("<li><a href=[^>]+>([^<]+)</a>").FindAllStringSubmatch(list, -1)
 	sections := []string{}
 	for _, val := range temp {
 		sections = append(sections, val[1])
 	}
-	return result
+	return sections
 }
