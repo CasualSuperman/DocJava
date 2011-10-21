@@ -14,12 +14,12 @@ func NewArgList(s string) []Argument {
 	args := strings.Split(s, " ")
 	result := []Argument{}
 	for _, arg := range args {
-		result = append(result, parse(arg))
+		result = append(result, parseArgs(arg))
 	}
 	return result
 }
 
-func parse(s string) Argument {
+func parseArgs(s string) Argument {
 	halves := strings.Split(s, "&nbsp;")
 	return Argument{halves[0], NewType(halves[1])}
 }

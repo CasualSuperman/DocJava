@@ -10,13 +10,17 @@ package main
    the MIT License.
 */
 import (
+	"flag"
 	"io/ioutil"
 	"regexp"
 	"strings"
 )
 
+var parse *string = flag.String("f", "The file to parse.", "")
+
 func main() {
-	data, _ := ioutil.ReadFile("_test_data.html")
+	flag.Parse()
+	data, _ := ioutil.ReadFile(*parse)
 	debugPrint(SplitClass(string(data))...)
 }
 
