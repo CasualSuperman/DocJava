@@ -6,9 +6,8 @@ package main
    Author: Bobby Wertman
    Version: 0.0.0
    Date: October 20, 2011
-   This application and its source are provided 'as-is' and are available under
-   the MIT License.
 */
+
 import (
 	"flag"
 	"io/ioutil"
@@ -25,6 +24,13 @@ func main() {
 }
 
 func SplitClass(html string) []string {
+	/* preamble
+	 * nested_class
+	 * nested_interface
+	 * field
+	 * constructor
+	 * method
+	 */
 	menu := strings.SplitN(html, "<ul class=\"subNavList\">\n<li>Detail:&nbsp;</li>\n", 2)[1]
 	list := strings.SplitN(menu, "</ul>", 2)[0]
 	temp := regexp.MustCompile("<li><a href=[^>]+>([^<]+)</a>").FindAllStringSubmatch(list, -1)
