@@ -23,20 +23,42 @@ func main() {
 	debugPrint(SplitClass(string(data))...)
 }
 
-func SplitClass(html string) []string {
-	/* preamble
-	 * nested_class
-	 * nested_interface
-	 * field
-	 * constructor
-	 * method
-	 */
+func SplitClass(html string) (result []string) {
+	result = []string{
+		"", // Preamble
+		"", // Nested_Class
+		"", // Nested_Interface
+		"", // Field
+		"", // Constructor
+		""} // Method
 	menu := strings.SplitN(html, "<ul class=\"subNavList\">\n<li>Detail:&nbsp;</li>\n", 2)[1]
 	list := strings.SplitN(menu, "</ul>", 2)[0]
 	temp := regexp.MustCompile("<li><a href=[^>]+>([^<]+)</a>").FindAllStringSubmatch(list, -1)
-	sections := []string{}
+	sections := []string{"START"}
 	for _, val := range temp {
 		sections = append(sections, val[1])
 	}
-	return sections
+	section := map[string]int{
+		"Field":  3,
+		"Constr": 4,
+		"Method": 5}
+	sections = append(sections, "END")
+	for i, val := range sections {
+		if val == "START" || val == "END" {
+			continue
+		}
+		result[section[val]] = splitSection(html, sections[i-1], val)
+	}
+	return result
+}
+
+func splitSection(data, first, second string) (result string) {
+	delimeters := map[string]string{
+		"START":  "<div class=\"details\">\n<ul class=\"blockList\">\n<li class=\"blockList\">",
+		"Field":  "<!-- ============ FIELD DETAIL =========== -->",
+		"Constr": "<!-- ========= CONSTRUCTOR DETAIL ======== -->",
+		"Method": "<!-- ============ METHOD DETAIL ========== -->",
+		"END":    "<!-- ========= END OF CLASS DATA ========= -->"}
+	result = strings.Split(strings.Split(data, delimeters[first])[1], delimeters[second])[0]
+	return
 }
