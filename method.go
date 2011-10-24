@@ -42,7 +42,7 @@ func NewMethod(s string) (m Method) {
 	mMask := methodMasker.Apply(data[1])
 	mType := NewType(data[2])
 	mName := data[3]
-	mArgs := NewArgList(regexp.MustCompile("\n[ \t]*").ReplaceAllString(data[4], ""))
+	mArgs := NewArgList(regexp.MustCompile("\n[ \t]*").ReplaceAllString(data[4], " "))
 	mThrow := data[5]
 	mDoc := NewDoc("<div" + strings.SplitN(s, "<div", 2)[1])
 	return Method{mMask, mType, mName, mArgs, mThrow, mDoc}

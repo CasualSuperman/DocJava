@@ -53,7 +53,7 @@ func NewClass(data []string) (c Class) {
 	c.identifier = strings.Replace(strings.Replace(info[2], "&gt;", ">", -1), "&lt;", "<", -1)
 	c.super = NewType(info[3]).String()
 	if len(info[4]) > 0 {
-		c.interfaces = strings.Split(RemoveUrl(info[5]), ",")
+		c.interfaces = strings.Split(sanitize(info[5]), ",")
 	} else {
 		c.interfaces = []string{}
 	}

@@ -1,10 +1,5 @@
 package main
 
-import (
-	"strings"
-	"regexp"
-)
-
 // Page 184 of the Java Specification 3
 // Section 8.1.4
 type Type struct {
@@ -27,12 +22,7 @@ func (t Type) String() (s string) {
 }
 
 func NewType(usType string) (t Type) {
-	sType := ""
-		usType = RemoveUrl(usType)
-		usType = strings.Replace(usType, "&gt;", ">", -1)
-		usType = strings.Replace(usType, "&lt;", "<", -1)
-		sType = regexp.MustCompile(", |,|^|[^<,]+ ?\\.").ReplaceAllString(usType, "")
-		sType = strings.Trim(usType, " ")
+	sType := sanitize(usType)
 	t.typeDeclSpecifier = sType
 	return
 }

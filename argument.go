@@ -5,8 +5,8 @@ import (
 )
 
 type Argument struct {
-	argName string
 	argType Type
+	argName string
 }
 
 func NewArgList(s string) []Argument {
@@ -14,7 +14,7 @@ func NewArgList(s string) []Argument {
 		return []Argument{}
 	}
 	s = RemoveUrl(s)
-	args := strings.Split(s, " ")
+	args := strings.Split(s, ",")
 	result := []Argument{}
 	for _, arg := range args {
 		result = append(result, parseArgs(arg))
@@ -24,12 +24,12 @@ func NewArgList(s string) []Argument {
 
 func parseArgs(s string) Argument {
 	halves := strings.Split(s, "&nbsp;")
-	return Argument{halves[0], NewType(halves[1])}
+	return Argument{NewType(halves[0]), halves[1]}
 }
 
 func (a Argument) String() (s string) {
-	s += a.argName
-	s += " "
 	s += a.argType.String()
+	s += " "
+	s += a.argName
 	return
 }
