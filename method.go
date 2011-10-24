@@ -31,6 +31,11 @@ type Method struct {
 }
 
 func NewMethod(s string) (m Method) {
+	defer func() {
+		if x := recover(); x != nil {
+			debugPrint(s)
+		}
+	}()
 	/* 1) Method modifiers
 	 * 2) Method type
 	 * 3) Method name
@@ -42,7 +47,10 @@ func NewMethod(s string) (m Method) {
 	mMask := methodMasker.Apply(data[1])
 	mType := NewType(data[2])
 	mName := data[3]
-	mArgs := NewArgList(data[4])
+	mArgs := []Argument{}
+	if data[4] != "" {
+		mArgs = NewArgList(data[4])
+	}
 	mThrow := data[5]
 	mDoc := NewDoc("<div" + strings.SplitN(s, "<div", 2)[1])
 	return Method{mMask, mType, mName, mArgs, mThrow, mDoc}
