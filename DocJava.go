@@ -84,6 +84,6 @@ func splitDetailSection(data, start, end string) string {
 		"Field":  "<!-- ============ FIELD DETAIL =========== -->\n<ul class=\"blockList\">\n<li class=\"blockList\"><a name=\"field_detail\">",
 		"Constr": "<!-- ========= CONSTRUCTOR DETAIL ======== -->\n<ul class=\"blockList\">\n<li class=\"blockList\"><a name=\"constructor_detail\">",
 		"Method": "<!-- ============ METHOD DETAIL ========== -->\n<ul class=\"blockList\">\n<li class=\"blockList\"><a name=\"method_detail\">",
-		"END":    "<!-- ========= END OF CLASS DATA ========= -->"}
+		"END":    "</div>\n</div>\n<!-- ========= END OF CLASS DATA ========= -->"}
 	return strings.Split(strings.Split(data, delimeters[start])[1], delimeters[end])[0]
 }
