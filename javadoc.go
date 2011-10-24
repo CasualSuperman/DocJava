@@ -82,7 +82,7 @@ func (j *JavaDoc) AddInfo(info []string) {
 }
 
 func (j JavaDoc) String() (s string) {
-	s += "/**"
+	s += "\n/**"
 	s += "\n * " + j.description
 	if j.modeledBy != "" {
 		s += "\n *"

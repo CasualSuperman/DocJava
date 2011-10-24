@@ -10,6 +10,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"regexp"
 	"strings"
@@ -20,7 +21,8 @@ var parse *string = flag.String("f", "The file to parse.", "")
 func main() {
 	flag.Parse()
 	data, _ := ioutil.ReadFile(*parse)
-	debugPrint(SplitClass(string(data))...)
+	class := SplitClass(string(data))
+	fmt.Println(NewClass(class).String())
 }
 
 func SplitClass(html string) (result []string) {
@@ -79,9 +81,9 @@ func splitSummarySection(data, start, end string) (result string) {
 func splitDetailSection(data, start, end string) string {
 	delimeters := map[string]string{
 		"START":  "<div class=\"details\">\n<ul class=\"blockList\">\n<li class=\"blockList\">",
-		"Field":  "<!-- ============ FIELD DETAIL =========== -->",
-		"Constr": "<!-- ========= CONSTRUCTOR DETAIL ======== -->",
-		"Method": "<!-- ============ METHOD DETAIL ========== -->",
+		"Field":  "<!-- ============ FIELD DETAIL =========== -->\n<ul class=\"blockList\">\n<li class=\"blockList\"><a name=\"field_detail\">",
+		"Constr": "<!-- ========= CONSTRUCTOR DETAIL ======== -->\n<ul class=\"blockList\">\n<li class=\"blockList\"><a name=\"constructor_detail\">",
+		"Method": "<!-- ============ METHOD DETAIL ========== -->\n<ul class=\"blockList\">\n<li class=\"blockList\"><a name=\"method_detail\">",
 		"END":    "<!-- ========= END OF CLASS DATA ========= -->"}
 	return strings.Split(strings.Split(data, delimeters[start])[1], delimeters[end])[0]
 }

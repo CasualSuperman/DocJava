@@ -37,13 +37,14 @@ type Class struct {
 	doc JavaDoc
 }
 
-func NewClass(preamble, nested_class, nested_interface, field, constructor, method string) (c Class) {
+func NewClass(data []string) (c Class) {
 	/* 1) Modifiers
 	 * 2) Class Name
 	 * 3) Extends
 	 * 4) Ignored
 	 * 5) Implements
 	 */
+	preamble, nested_class, nested_interface, field, constructor, method := data[0], data[1], data[2], data[3], data[4], data[5]
 	preamble_reg := regexp.MustCompile("<pre>(.*) class <span[^>]+>([^<]+)</span>\nextends ([^\\n]+)\n?(implements (.+))?</pre>")
 	tempDoc := strings.Split(strings.Split(preamble, "</pre>\n")[1], "</div>\n<div class=\"summary\">")[0]
 	c.doc = NewDoc(tempDoc)
@@ -56,12 +57,18 @@ func NewClass(preamble, nested_class, nested_interface, field, constructor, meth
 	} else {
 		c.interfaces = []string{}
 	}
-	split := "<a name="
-	//classes := strings.Split(nested_class, split)
-	//interfaces := strings.Split(nested_interface, split)
+	split := "</a>\n<ul"
+	classes := strings.Split(nested_class, split)[1:]
+	interfaces := strings.Split(nested_interface, split)[1:]
 	fields := strings.Split(field, split)[1:]
 	constructors := strings.Split(constructor, split)[1:]
 	methods := strings.Split(method, split)[1:]
+	for _, value := range classes {
+		for _, value := range interfaces {
+			split = value
+		}
+		split = value
+	}
 	for _, value := range fields {
 		c.fieldDeclarations = append(c.fieldDeclarations, NewField("<a name="+value))
 	}
