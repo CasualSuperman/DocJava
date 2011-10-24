@@ -15,7 +15,7 @@ func RemoveUrl(s string) string {
 
 // Used for properly tabbing nested things
 func tab(s string, i int) string {
-	return strings.Replace(s, "\n", "\n\t", -1)
+	return strings.Replace(s, "\n", "\n    ", -1)
 }
 
 // Used for adding *'s to included newlines
