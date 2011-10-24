@@ -155,5 +155,8 @@ func (j JavaDoc) String() (s string) {
 		s += "\n * @example " + j.example
 	}
 	s += "\n */"
+	if s == "/**\n * "+j.description+"\n */" && !strings.Contains(j.description, "\n") {
+		s = "/** " + j.description + " */"
+	}
 	return
 }
