@@ -19,6 +19,9 @@ type JavaDoc struct {
 }
 
 func NewDoc(s string) (j JavaDoc) {
+	if s == "" {
+		return
+	}
 	j.description = strings.Replace(regexp.MustCompile("^<div class=\"block\">(.*)</div>").FindStringSubmatch(s)[1], "\n", "\n * ", -1)
 	s = strings.SplitN(s, "</div>", 2)[1]
 	s = regexp.MustCompile("</?span( class=\"strong\")?>").ReplaceAllString(s, "")
@@ -157,6 +160,9 @@ func (j JavaDoc) String() (s string) {
 	s += "\n */"
 	if s == "\n/**\n * "+j.description+"\n */" && !strings.Contains(j.description, "\n") {
 		s = "\n/** " + j.description + " */"
+	}
+	if s == "\n/**  */" {
+		s = ""
 	}
 	return
 }

@@ -36,7 +36,7 @@ func SplitClass(html string) (result []string) {
 		"", // Field
 		"", // Constructor
 		""} // Method
-	menu := strings.SplitN(html, "<ul class=\"subNavList\">\n<li>Summary:&nbsp;</li>\n", 2)[1]
+	menu := strings.SplitN(html, "<ul class=\"subNavList\">\n<li>Detail:&nbsp;</li>\n", 2)[1]
 	list := strings.SplitN(menu, "</ul>", 2)[0]
 	temp := regexp.MustCompile("<li><a href=[^>]+>([^<]+)</a>").FindAllStringSubmatch(list, -1)
 	sections := []string{"START"}
@@ -52,6 +52,11 @@ func SplitClass(html string) (result []string) {
 		"Method":    detail{5, true}}
 	sections = append(sections, "END")
 	for i, val := range sections {
+		defer func() {
+			if x := recover(); x != nil {
+				fmt.Println(x, val)
+			}
+		}()
 		if val == "END" {
 			continue
 		}

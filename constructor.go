@@ -53,12 +53,13 @@ func NewConstructor(input string) Constructor {
 	def := data[2]
 	throws := ""
 	mask := constructorMasker.Apply(strings.SplitN(def, "&nbsp;", 2)[0])
-	doc := regexp.MustCompile("(<div[^>]+>.*</div>.*)\n</li>\n</ul>").FindStringSubmatch(input)
+	docs := regexp.MustCompile("(<div[^>]+>.*</div>.*)?\n</li>\n</ul>").FindStringSubmatch(input)
 	if len(data) > 3 {
 		// throws clause
 		throws = RemoveUrl(data[3])
 	}
 	//	debugPrint(doc...)
 	types := NewArgList(regexp.MustCompile("\\((.*)\\)").FindStringSubmatch(def)[1])
-	return Constructor{mask, name, types, throws, NewDoc(doc[1])}
+	doc := NewDoc(docs[1])
+	return Constructor{mask, name, types, throws, doc}
 }
