@@ -23,9 +23,9 @@ func RemoveUrl(s string) string {
 // Used for properly tabbing nested things
 func tab(s string, i int) (result string) {
 	if tabs {
-		result = strings.Replace(s, "\n", "\n\t", -1)
+		result = "\t" + strings.Replace(s, "\n", "\n\t", -1)
 	} else {
-		result = strings.Replace(s, "\n", "\n    ", -1)
+		result = "    " + strings.Replace(s, "\n", "\n    ", -1)
 	}
 	return
 }

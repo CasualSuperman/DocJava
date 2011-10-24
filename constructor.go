@@ -39,7 +39,7 @@ func (c Constructor) String() (s string) {
 		s += param.String()
 	}
 	s += ") {"
-	s += "\n\n}"
+	s += "\n\n}\n"
 	return
 }
 

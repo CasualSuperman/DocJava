@@ -85,7 +85,7 @@ func (j *JavaDoc) AddInfo(info []string) {
 }
 
 func (j JavaDoc) String() (s string) {
-	s += "\n/**"
+	s += "/**"
 	s += "\n * " + j.description
 	if j.modeledBy != "" {
 		s += "\n *"
@@ -158,10 +158,10 @@ func (j JavaDoc) String() (s string) {
 		s += "\n * @example " + j.example
 	}
 	s += "\n */"
-	if s == "\n/**\n * "+j.description+"\n */" && !strings.Contains(j.description, "\n") {
-		s = "\n/** " + j.description + " */"
+	if s == "/**\n * "+j.description+"\n */" && !strings.Contains(j.description, "\n") {
+		s = "/** " + j.description + " */"
 	}
-	if s == "\n/**  */" {
+	if s == "/**  */" {
 		s = ""
 	}
 	return

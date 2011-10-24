@@ -33,7 +33,7 @@ func (f Field) String() (s string) {
 	s += f.fieldType.String()
 	s += " "
 	s += f.variableDeclarator
-	s += ";"
+	s += ";\n"
 	return
 }
 

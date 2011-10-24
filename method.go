@@ -68,7 +68,11 @@ func (m Method) String() (s string) {
 		s += " "
 	}
 	s += m.throws
-	s += " {"
-	s += "\n\n}"
+	if m.methodModifiers.Has(Mask{1 << 5, "abstract"}) { // abstract
+		s += ";\n"
+	} else {
+		s += " {"
+		s += "\n\n}\n"
+	}
 	return
 }
