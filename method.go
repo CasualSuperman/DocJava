@@ -17,6 +17,7 @@ var (
 
 type Method struct {
 	methodModifiers Maskable // Optional
+	staticType      Type     //Optional
 	methodType      Type     // Optional
 	methodName      string
 	// (
@@ -32,20 +33,25 @@ type Method struct {
 
 func NewMethod(s string) (m Method) {
 	/* 1) Method modifiers
-	 * 2) Method type
-	 * 3) Method name
-	 * 4) Arguments
-	 * 5) (Optional) throws
+	 * 2) Static Method Type
+	 * 3) Method type
+	 * 4) Method name
+	 * 5) Arguments
+	 * 6) (Optional) throws
 	 */
-	str := "<pre>(.+)&nbsp;(.+)&nbsp;(.+)\\((.*)\\)[^<]*(throws <a[^>]*>.+</a>)?</pre>"
+	str := "<pre>([^;]+)&nbsp;(.+&nbsp;)?(.+)&nbsp;(.+)\\((.*)\\)[^<]*(throws <a[^>]*>.+</a>)?</pre>"
 	data := regexp.MustCompile(str).FindStringSubmatch(s)
 	mMask := methodMasker.Apply(data[1])
-	mType := NewType(data[2])
-	mName := data[3]
-	mArgs := NewArgList(regexp.MustCompile("\n[ \t]*").ReplaceAllString(data[4], " "))
-	mThrow := data[5]
+	mType := NewType(data[3])
+	mName := data[4]
+	mArgs := NewArgList(regexp.MustCompile("\n[ \t]*").ReplaceAllString(data[5], " "))
+	mThrow := data[6]
+	var uType Type
+	if data[2] != "" {
+		uType = NewType(data[2][:len(data[2])-6])
+	}
 	mDoc := NewDoc("<div" + strings.SplitN(s, "<div", 2)[1])
-	return Method{mMask, mType, mName, mArgs, mThrow, mDoc}
+	return Method{mMask, uType, mType, mName, mArgs, mThrow, mDoc}
 }
 
 func (m Method) String() (s string) {
@@ -53,6 +59,11 @@ func (m Method) String() (s string) {
 	s += "\n"
 	s += m.methodModifiers.String()
 	s += " "
+	if temp := m.staticType.String(); temp != "" {
+		s += temp
+		s += " "
+		debugPrint(temp)
+	}
 	s += m.methodType.String()
 	s += " "
 	s += m.methodName
