@@ -47,3 +47,13 @@ func debugPrint(data ...string) {
 	}
 	fmt.Println("}")
 }
+
+func sanitize(s string) (r string) {
+	r = s
+	r = RemoveUrl(r)
+	r = strings.Replace(r, "&gt;", ">", -1)
+	r = strings.Replace(r, "&lt;", "<", -1)
+	r = regexp.MustCompile(", |,|^|[^<,]+ ?\\.").ReplaceAllString(r, "")
+	r = strings.Trim(r, " ")
+	return
+}

@@ -20,7 +20,10 @@ var parse *string = flag.String("f", "The file to parse.", "")
 
 func main() {
 	flag.Parse()
-	data, _ := ioutil.ReadFile(*parse)
+	data, err := ioutil.ReadFile(*parse)
+	if err != nil {
+		panic(err)
+	}
 	class := SplitClass(string(data))
 	fmt.Println(NewClass(class).String())
 }
