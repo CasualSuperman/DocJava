@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"regexp"
 	"strings"
@@ -9,13 +10,24 @@ import (
 // Used for Stripping out hyperlinks
 var UrlReg *regexp.Regexp = regexp.MustCompile("</?a[^>]*>")
 
+var tabs bool
+
+func init() {
+	flag.BoolVar(&tabs, "t", false, "Use tabs instead of spaces.")
+}
+
 func RemoveUrl(s string) string {
 	return UrlReg.ReplaceAllString(s, "")
 }
 
 // Used for properly tabbing nested things
-func tab(s string, i int) string {
-	return strings.Replace(s, "\n", "\n    ", -1)
+func tab(s string, i int) (result string) {
+	if tabs {
+		result = strings.Replace(s, "\n", "\n\t", -1)
+	} else {
+		result = strings.Replace(s, "\n", "\n    ", -1)
+	}
+	return
 }
 
 // Used for adding *'s to included newlines
