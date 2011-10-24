@@ -39,6 +39,7 @@ func SplitClass(html string) (result []string) {
 		sections = append(sections, val[1])
 	}
 	section := map[string]detail{
+		"START":     detail{0, false},
 		"Nested":    detail{1, false},
 		"Interface": detail{2, false},
 		"Field":     detail{3, true},
@@ -46,7 +47,7 @@ func SplitClass(html string) (result []string) {
 		"Method":    detail{5, true}}
 	sections = append(sections, "END")
 	for i, val := range sections {
-		if val == "START" || val == "END" {
+		if val == "END" {
 			continue
 		}
 		index := section[val].Index
@@ -56,7 +57,6 @@ func SplitClass(html string) (result []string) {
 			result[index] = splitSummarySection(html, val, sections[i+1])
 		}
 	}
-	//return sections
 	return result
 }
 
