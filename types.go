@@ -28,16 +28,11 @@ func (t Type) String() (s string) {
 
 func NewType(usType string) (t Type) {
 	sType := ""
-	// If not a basic type
-	if strings.Contains(usType, "<") {
-		// URL with type enclosed
 		usType = RemoveUrl(usType)
 		usType = strings.Replace(usType, "&gt;", ">", -1)
 		usType = strings.Replace(usType, "&lt;", "<", -1)
 		sType = regexp.MustCompile(", |,|^|[^<,]+ ?\\.").ReplaceAllString(usType, "")
-	} else {
 		sType = strings.Trim(usType, " ")
-	}
 	t.typeDeclSpecifier = sType
 	return
 }
