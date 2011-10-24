@@ -10,6 +10,9 @@ type Argument struct {
 }
 
 func NewArgList(s string) []Argument {
+	if strings.Trim(s, " ") == "" {
+		return []Argument{}
+	}
 	s = RemoveUrl(s)
 	args := strings.Split(s, " ")
 	result := []Argument{}

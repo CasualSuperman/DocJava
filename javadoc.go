@@ -60,9 +60,9 @@ func (j *JavaDoc) AddInfo(info []string) {
 	case "Parameters":
 		info[1] = strings.Replace(strings.Replace(info[1], "<code>", "", 1), "</code> - ", " ", 1)
 		j.param = append(j.param, info[1])
-	case "Precondition":
+	case "Preconditions":
 		j.precondition = append(j.precondition, info[1])
-	case "Postcondition":
+	case "Postconditions":
 		j.postcondition = append(j.postcondition, info[1])
 	case "Preserves":
 		j.preserves = append(j.preserves, info[1])
