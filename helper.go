@@ -3,12 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"regexp"
+	"exp/regexp"
 	"strings"
 )
 
 // Used for Stripping out hyperlinks
-var UrlReg *regexp.Regexp = regexp.MustCompile("</?a[^>]*>")
+var UrlReg *regexp.Regexp = regexp.MustCompile("</?a.*?>")
 
 var tabs bool
 
