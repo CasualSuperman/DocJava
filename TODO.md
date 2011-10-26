@@ -1,10 +1,8 @@
 TODO
 ====
-* Add Interface support
-* Add dynamic DocJava support
-* Add web-fetching
+(In order of importance)
 * Switch to exp/regexp
-
-Long-term
----------
+* Add Interface support
+* Add web-fetching
+* Add dynamic DocJava support
 * Add support for previous version
