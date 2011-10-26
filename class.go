@@ -3,6 +3,7 @@ package main
 import (
 	"regexp"
 	"strings"
+	"sync"
 )
 
 var (
@@ -63,21 +64,39 @@ func NewClass(data []string) (c Class) {
 	fields := strings.Split(field, split)[1:]
 	constructors := strings.Split(constructor, split)[1:]
 	methods := strings.Split(method, split)[1:]
-	for _, value := range classes {
-		for _, value := range interfaces {
-			split = value
+
+	var lock sync.WaitGroup
+	lock.Add(5)
+	go func() {
+		for _, _ = range classes {
 		}
-		split = value
-	}
-	for _, value := range fields {
-		c.fieldDeclarations = append(c.fieldDeclarations, NewField("<a name="+value))
-	}
-	for _, value := range constructors {
-		c.constructorDeclarations = append(c.constructorDeclarations, NewConstructor("<a name="+value))
-	}
-	for _, value := range methods {
-		c.methodDeclarations = append(c.methodDeclarations, NewMethod("<a name="+value))
-	}
+		lock.Done()
+	}()
+	go func() {
+		for _, _ = range interfaces {
+
+		}
+		lock.Done()
+	}()
+	go func() {
+		for _, value := range fields {
+			c.fieldDeclarations = append(c.fieldDeclarations, NewField("<a name="+value))
+		}
+		lock.Done()
+	}()
+	go func() {
+		for _, value := range constructors {
+			c.constructorDeclarations = append(c.constructorDeclarations, NewConstructor("<a name="+value))
+		}
+		lock.Done()
+	}()
+	go func() {
+		for _, value := range methods {
+			c.methodDeclarations = append(c.methodDeclarations, NewMethod("<a name="+value))
+		}
+		lock.Done()
+	}()
+	lock.Wait()
 	return
 }
 
