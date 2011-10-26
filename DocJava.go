@@ -13,13 +13,16 @@ import (
 	"fmt"
 	"io/ioutil"
 	"regexp"
+	"runtime"
 	"strings"
 )
 
-var parse *string = flag.String("f", "The file to parse.", "")
+var parse *string = flag.String("f", "", "The file to parse.")
+var cores *int = flag.Int("c", 4, "The number of cores to run on")
 
 func main() {
 	flag.Parse()
+	runtime.GOMAXPROCS(*cores)
 	data, err := ioutil.ReadFile(*parse)
 	if err != nil {
 		panic(err)
