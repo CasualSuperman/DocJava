@@ -62,7 +62,6 @@ func (m Method) String() (s string) {
 	if temp := m.staticType.String(); temp != "" {
 		s += temp
 		s += " "
-		debugPrint(temp)
 	}
 	s += m.methodType.String()
 	s += " "
